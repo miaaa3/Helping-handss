@@ -3,24 +3,24 @@
       <a href="#" class="flex items-center">
         <img src="assets/images/n.png" class="h-12 w-48 mr-3" alt="Helping Hands Logo" />
       </a>
-      <button (click)="toggleMenu()" class="block lg:hidden md:hidden text-gray-900 dark:text-white">
+      <button (click)="toggleMenu()" class="block lg:hidden md:hidden text-gray-900 dark:text-black">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
         </svg>
       </button>
       <div [ngClass]="menuOpen ? 'block' : 'hidden'" class="w-full md:block md:w-auto mr-14">
-        <ul class="flex flex-col font-medium font-Inter mt-4 md:flex-row md:space-x-8 md:mt-0">
+        <ul class="flex flex-col font-semibold font-rale mt-4 md:flex-row md:space-x-8 md:mt-0">
           <li>
-            <a href="#" class="text-gray-900 dark:text-white hover:underline" aria-current="page">Home</a>
+            <a href="#" class=" dark:text-black hover:underline" aria-current="page">Home</a>
           </li>
           <li>
-            <a href="#" class="text-gray-900 dark:text-white hover:underline">Events</a>
+            <a href="#" class=" dark:text-black hover:underline">Events</a>
           </li>
           <li>
-            <a href="#" class="text-gray-900 dark:text-white hover:underline">Organizations</a>
+            <a href="#" class=" dark:text-black hover:underline">Organizations</a>
           </li>
           <li>
-            <button class="bg-green hover:bg-green-light text-black py-1 px-4 rounded">Login</button>
+            <button class="bg-green hover:bg-green-light text- py-1 px-4 rounded "style="color: white;">Login</button>
           </li>
         </ul>
       </div>

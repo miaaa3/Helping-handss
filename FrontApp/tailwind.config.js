@@ -5,14 +5,29 @@ module.exports = {
     fontFamily:{
       'poppins': ['Poppins'],
       'Unica' : ['Unica One'],
-      'Inter' : ['Inter']
+      'Inter' : ['Inter'],
+      'Roboto': ['Roboto'],
+      'Teco' : ['Teco'],
+      'mon':['Montserrat'],
+      'rale':['Raleway']
     },
     colors:{
       green: {
-        light: '#6c9ca4',
+        light: '#34997a',
         DEFAULT: '#2f7663',
         dark: '#163f3f',
-    },
+      },
+      yellow:{
+        DEFAULT:'#ffcb31',
+        light:'#f2d47c',
+      },
+      white:{
+        DEFAULT:'#ffff'
+      },
+      black:{
+        DEFAULT:'#060606'
+      },
+
     extend: {},
   },
   plugins: [],

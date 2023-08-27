@@ -10,7 +10,7 @@ const routes: Routes = [
   {path:'sign-up-organization', component: RegistrationPageOrganizationComponent},
   {path:'login-volunteer', component: LoginVolunteerComponent},
   {path:'welcome-page', component: WelcomePageComponent},
-  {path:'', redirectTo:'welcome-page',component:WelcomePageComponent}
+  {path:'', redirectTo:'welcome-page',pathMatch: 'full'}
 
 ];
 

@@ -9,28 +9,18 @@
           <div class="w-full lg:w-[47%]  flex flex-col items-center justify-center  bg-no-repeat bg-cover bg-center " style="background-image: url('assets/images/volunteer.jpg');">
 
           </div>
-          <div class=" lg:w-1/2 py-2 px-7 ">
-            <form>
+          <div class=" lg:w-1/2 py-2 px-7 mx-4" >
+            <form (ngSubmit)="onSubmit()">
                 <div class="border-b border-gray-900/10  mt-3 ">
                   <div class="flex justify-between items-center mb-2">
                     <h2 class="text-base font-bold leading-9 text-gray-900">Sign Up</h2>
-                    <div class="checkbox-wrapper-35">
-                      <input value="private" name="switch" id="switch" type="checkbox" class="switch">
-                      <label for="switch">
-                        <span class="switch-x-toggletext">
-                          <span class="switch-x-unchecked"><span class="switch-x-hiddenlabel">Unchecked: </span>Volunteer</span>
-                          <span class="switch-x-checked"><span class="switch-x-hiddenlabel">Checked: </span>Organization</span>
-                        </span>
-                      </label>
-                    </div>
                   </div>
-                  <!--the switch button -->
                   <div class=" gap-3 flex flex-col sm:flex-row mb-3" >
                     <div class="sm:col-span-3 flex-grow sm:w-1/2">
                       <label for="first-name" class="block text-sm font-medium leading-6 text-gray-900">First Name</label>
                       <div class="mt-2">
-                        <div class="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-teal-600 sm:max-w-md md:max-w-xl">
-                          <input type="text" name="first-name" id="first-name" autocomplete="given-name" class="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" placeholder="first-name">
+                        <div class="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-teal-600 sm:max-w-md md:max-w-xl ">
+                          <input type="text" name="first-name" id="first-name" autocomplete="given-name" class="block flex-1 border border-gray-300 rounded-md  bg-transparent py-1.5 pl-2 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-5" placeholder="First-name" [(ngModel)]="volunteer.firstName">
                         </div>
                       </div>
                     </div>
@@ -38,7 +28,7 @@
                       <label for="last-name" class="block text-sm font-medium leading-6 text-gray-900">Last Name</label>
                       <div class="mt-2">
                         <div class="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-teal-600 sm:max-w-md md:max-w-xl">
-                          <input type="text" name="last-name" id="last-name" autocomplete="family-name" class="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" placeholder="last-name">
+                          <input type="text" name="last-name" id="last-name" autocomplete="family-name" class="block flex-1 border border-gray-300 rounded-md  bg-transparent py-1.5 pl-2 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-5" placeholder="Last-name" [(ngModel)]="volunteer.lastName">
                         </div>
                       </div>
                     </div>
@@ -50,7 +40,7 @@
                       <label for="email" class="block text-sm font-medium leading-6 text-gray-900">Email Address</label>
                       <div class="mt-2">
                         <div class="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-teal-600 sm:max-w-md md:max-w-xl">
-                          <input type="email" name="email" id="email" autocomplete="email" class="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" placeholder="HelpingHands@example.com">
+                          <input type="email" name="email" id="email" autocomplete="email" class="block flex-1 border border-gray-300 rounded-md  bg-transparent py-1.5 pl-2 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-5" placeholder="HelpingHands@example.com" [(ngModel)]="volunteer.email">
                         </div>
                       </div>
                     </div>
@@ -58,10 +48,10 @@
                       <label for="gender" class="block text-sm font-medium leading-6 text-gray-900">Gender</label>
                       <div class="mt-2">
                         <div class="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-teal-600 sm:max-w-md md:max-w-xl">
-                          <select id="gender" name="gender" autocomplete="gender" class="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6 h-9">
-                            <option>Female</option>
-                            <option>Male</option>
-                            <option>Other</option>
+                          <select id="gender" name="gender" autocomplete="gender" class="block flex-1 border border-gray-300 rounded-md  bg-transparent py-1.5 pl-2 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-5 h-8" [(ngModel)]="volunteer.gender">
+                            <option value="FEMALE">Female</option>
+                            <option value="MALE">Male</option>
+                            <option value="OTHER">Other</option>
                           </select>
                         </div>
                       </div>
@@ -73,7 +63,7 @@
                       <label for="phone" class="block text-sm font-medium leading-6 text-gray-900">Phone Number</label>
                       <div class="mt-2">
                         <div class="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-teal-600 sm:max-w-md md:max-w-xl">
-                          <input type="tel" name="phone" id="phone" autocomplete="cc-number" class="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" placeholder="+123 4567890">
+                          <input type="tel" name="phone" id="phone" autocomplete="cc-number" class="block flex-1 border border-gray-300 rounded-md  bg-transparent py-1.5 pl-2 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-5" placeholder="+123 4567890" [(ngModel)]="volunteer.phone">
                         </div>
                       </div>
                     </div>
@@ -81,7 +71,7 @@
                       <label for="birthdate" class="block text-sm font-medium leading-6 text-gray-900">Birthdate</label>
                       <div class="mt-2">
                         <div class="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-teal-600 sm:max-w-md md:max-w-xl">
-                          <input type="date" name="birthdate" id="birthdate" class="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6">
+                          <input type="date" name="birthdate" id="birthdate" class="block flex-1 border border-gray-300 rounded-md  bg-transparent py-1.5 pl-2 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-5" [(ngModel)]="volunteer.birthdate">
                         </div>
                       </div>
                     </div>
@@ -93,7 +83,7 @@
                       <label for="address" class="block text-sm font-medium leading-6 text-gray-900">Address</label>
                       <div class="mt-2">
                         <div class="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-teal-600 sm:max-w-md md:max-w-xl">
-                          <input type="text" name="address" id="address" class="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" placeholder="e.g. 123 Main St, City, State ZIP">
+                          <input type="text" name="address" id="address" class="block flex-1 border border-gray-300 rounded-md  bg-transparent py-1.5 pl-2 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-5" placeholder="e.g. 123 Main St, City, State ZIP" [(ngModel)]="volunteer.address">
                         </div>
                       </div>
                     </div>
@@ -101,16 +91,16 @@
                       <label for="password" class="block text-sm font-medium leading-6 text-gray-900">Password</label>
                       <div class="mt-2">
                         <div class="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-teal-600 sm:max-w-md md:max-w-xl">
-                          <input type="password" name="password" id="password" class="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" placeholder="Password">
+                          <input type="password" name="password" id="password" class="block flex-1 border border-gray-300 rounded-md  bg-transparent py-1.5 pl-2 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-5" placeholder="Password" [(ngModel)]="volunteer.password">
                         </div>
                       </div>
                     </div>
                   </div>
                   
 
-              <div class="gap-3 flex flex-col sm:flex-row mb-3">
+              <div class="gap-3 flex flex-col sm:flex-row my-3">
                 <div class="sm:col-span-3 flex-grow sm:w-1/2">
-                  <button type="submit" class="rounded-md w-24 bg-teal-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-teal-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-400">Save</button>
+                  <button type="submit" class="rounded-md w-24 bg-green px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-light focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-400">Save</button>
                 </div>
                 <div class="sm:col-span-3 flex-grow sm:w-1/2 flex sm:mt-0 justify-end">
                   <p>Registered already? <a href="/login-volunteer" class="font-semibold text-teal-500">Login</a></p>

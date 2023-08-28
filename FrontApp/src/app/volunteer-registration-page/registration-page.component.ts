@@ -1,4 +1,6 @@
 import { Component, Input } from '@angular/core';
+import { Volunteer } from '../models/volunteer';
+import { VolunteerServiceService } from '../services/volunteerservice';
 
 
 @Component({
@@ -29,4 +31,19 @@ export class RegistrationPageComponent {
     }
   }
 
+  volunteer: Volunteer = {} as Volunteer; // Initialize an empty Volunteer object
+
+  constructor(private volunteerService: VolunteerServiceService) { }
+
+  onSubmit(): void {
+    this.volunteerService.register(this.volunteer).subscribe(
+      response => {
+        console.log('Registration successful:', response);
+      },
+      error => {
+        console.error('Registration failed:', error);
+      }
+    );
+  }
 }
+

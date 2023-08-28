@@ -17,6 +17,7 @@ import { RegistrationPageOrganizationComponent } from './organization-registrati
 import { LoginVolunteerComponent } from './login-volunteer/login-volunteer.component';
 import { WelcomePageComponent } from './welcome-page/welcome-page.component';
 import { NavbarWelcomepageComponent } from './navbar-welcomepage/navbar-welcomepage.component';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,8 @@ import { NavbarWelcomepageComponent } from './navbar-welcomepage/navbar-welcomep
     MatCheckboxModule,
     FormsModule,
     MatFormFieldModule,
-     MatIconModule
+    MatIconModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]

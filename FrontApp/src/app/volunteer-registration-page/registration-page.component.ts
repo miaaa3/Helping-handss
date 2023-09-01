@@ -36,6 +36,7 @@ export class RegistrationPageComponent {
   constructor(private volunteerService: VolunteerServiceService) { }
 
   onSubmit(): void {
+    console.log(this.volunteer)
     this.volunteerService.register(this.volunteer).subscribe(
       response => {
         console.log('Registration successful:', response);

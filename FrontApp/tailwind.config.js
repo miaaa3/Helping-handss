@@ -21,19 +21,33 @@ module.exports = {
       yellow:{
         DEFAULT:'#ffcb31',
         light:'#f2d47c',
+        dollar:'#ffc107',
+        lighter:'#ffda6a'
       },
       white:{
-        DEFAULT:'#ffff'
+        DEFAULT:'#ffff',
+        chalk:'#FBFFFF'
       },
       black:{
         DEFAULT:'#060606'
       },
       gray:{
+        100:'#f3f4f6',
+        200:'#e5e7eb',
+        300:'#cbd5e1',
         400:'#94a3b8',
         500:'#64748b',
-        300:'#cbd5e1',
-        900:'#0f172a'
+        800:'#1f2937',
+        900:'#0f172a',
       },
+      whitesmoke:{
+        default:'#F5F5F5',
+      },
+      blue:{
+        600:'#2563eb',
+        500:'#3b82f6',
+        100:'#dbeafe',
+    },
 
     extend: {},
   },

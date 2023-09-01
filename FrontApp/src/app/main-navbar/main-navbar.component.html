@@ -1,0 +1,96 @@
+
+
+
+<!-- NAVBAR -->
+<nav class=" fixed flex dark:bg-slate-900 items-center justify-between bg-white-chalk px-3 py-4 w-full z-10 bg-white bg-clip-border text-gray-800 shadow-md">
+  <div>
+    <img src="assets/images/n.png" class="h-10 w-48 ml-0" alt="Helping Hands Logo" />
+</div>
+    <!--SEARCH BAR-->
+    <div class=" content-center justify-evenly flex mr-40">
+        <label class="block  text-sm w-[600px] ">
+        <div class="relative text-gray-500 focus-within:text-green ">
+        <input class="block w-full h-8 rounded-lg mr-2  mt-1 text-sm text-black dark:text-gray-900 dark:border-gray-500 dark:bg-whitesmoke-default pl-2 focus:border-green focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input" placeholder="Jane Doe">
+        <button class="absolute inset-y-0 right-0 px-4 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-green border border-transparent rounded-r-lg active:bg-green-light hover:bg-green-dark focus:outline-none focus:shadow-outline-green">
+            Search 
+        </button>
+        </div>
+    </label>
+    </div>
+    <!--END SEARCH BAR-->
+    <div class="flex justify-center items-center gap-2 ">
+      <!--ICONS-->
+        <div (click)="toggleDropdownNotif()"  class="w-7 hover:ring-4  cursor-pointer relative ring-blue-700/30 rounded-full ">
+          <img src="/assets/images/icon-notifications.png" alt="">
+          <div [ngClass]="showDropdownNotif ? 'block' : 'hidden'" class="drop-down  w-64 overflow-hidden bg-white rounded-md shadow absolute top-12 right-3">
+            <div class="py-2">
+              <a href="#" class="flex items-center px-4 py-3 border-b hover:bg-gray-100 -mx-2">
+                  <img class="h-8 w-8 rounded-full object-cover mx-1" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=334&q=80" alt="avatar">
+                  <p class="text-gray-600 text-sm mx-2">
+                      <span class="font-bold" href="#">Sara Salah</span> replied on the <span class="font-bold" href="#">Upload Image</span> artical . 2m
+                  </p>
+              </a>
+              <a href="#" class="flex items-center px-4 py-3 border-b hover:bg-gray-100 -mx-2">
+                  <img class="h-8 w-8 rounded-full object-cover mx-1" src="https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=634&q=80" alt="avatar">
+                  <p class="text-gray-600 text-sm mx-2">
+                      <span class="font-bold" href="#">Slick Net</span> start following you . 45m
+                  </p>
+              </a>
+              <a href="#" class="flex items-center px-4 py-3 border-b hover:bg-gray-100 -mx-2">
+                  <img class="h-8 w-8 rounded-full object-cover mx-1" src="https://images.unsplash.com/photo-1450297350677-623de575f31c?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=334&q=80" alt="avatar">
+                  <p class="text-gray-600 text-sm mx-2">
+                      <span class="font-bold" href="#">Jane Doe</span> Like Your reply on <span class="font-bold" href="#">Test with TDD</span> artical . 1h
+                  </p>
+              </a>
+              <a href="#" class="flex items-center px-4 py-3 hover:bg-gray-100 -mx-2">
+                  <img class="h-8 w-8 rounded-full object-cover mx-1" src="https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=398&q=80" alt="avatar">
+                  <p class="text-gray-600 text-sm mx-2">
+                      <span class="font-bold" href="#">Abigail Bennett</span> start following you . 3h
+                  </p>
+              </a>
+            </div>
+            <a href="#" class="block bg-green-dark text-white text-center font-bold py-2">See all notifications</a>
+        </div>
+      </div>
+    
+  <!--END ICONS-->
+
+    
+    <!--DROPDOWN-->
+      <div (click)="toggleDropdown()" class="h-10 w-10 hover:ring-4  cursor-pointer relative ring-blue-700/30 rounded-full bg-cover bg-center bg-[url('https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80')]">
+         <div [ngClass]="showDropdown ? 'block' : 'hidden'" class="drop-down  w-48 overflow-hidden bg-white rounded-md shadow absolute top-12 right-3">
+          <ul>
+            <li class="px-3 py-3 text-sm font-medium flex items-center space-x-2 hover:bg-gray-100">
+              <span>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+              </span>
+              <span> Setting </span>
+            </li>
+            <li class="px-3  py-3  text-sm font-medium flex items-center space-x-2 hover:bg-slate-400">
+              <span>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                </svg>
+              </span>
+              <span> Profile </span>
+            </li>
+            <li class="px-3  py-3 text-sm font-medium flex items-center space-x-2 hover:bg-slate-400">
+              <span>
+           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+            </svg>
+              </span>
+              <span> Logout </span>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <!--END DROPDOWN-->
+    </div>  
+
+    </nav>
+    
+    <!--END NAVBAR-->

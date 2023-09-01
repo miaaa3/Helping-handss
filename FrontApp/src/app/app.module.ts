@@ -18,6 +18,13 @@ import { LoginVolunteerComponent } from './login-volunteer/login-volunteer.compo
 import { WelcomePageComponent } from './welcome-page/welcome-page.component';
 import { NavbarWelcomepageComponent } from './navbar-welcomepage/navbar-welcomepage.component';
 import { HttpClientModule } from '@angular/common/http';
+import { Router, RouterModule } from '@angular/router';
+import { JwtModule } from '@auth0/angular-jwt';
+import { HomePageComponent } from './home-page/home-page.component';
+import { MainNavbarComponent } from './main-navbar/main-navbar.component';
+import { HomeComponent } from './home/home.component';
+import { MainSidebarComponent } from './main-sidebar/main-sidebar.component';
+import { ToastrModule, ToastrService } from 'ngx-toastr';
 
 @NgModule({
   declarations: [
@@ -26,7 +33,12 @@ import { HttpClientModule } from '@angular/common/http';
     RegistrationPageOrganizationComponent,
     LoginVolunteerComponent,
     WelcomePageComponent,
-    NavbarWelcomepageComponent
+    NavbarWelcomepageComponent,
+    HomePageComponent,
+    MainNavbarComponent,
+    HomeComponent,
+    MainSidebarComponent,
+    
   ],
   imports: [
     BrowserModule,
@@ -42,9 +54,12 @@ import { HttpClientModule } from '@angular/common/http';
     FormsModule,
     MatFormFieldModule,
     MatIconModule,
-    HttpClientModule
+    HttpClientModule,
+    RouterModule,
+    ToastrModule.forRoot()
+    
   ],
-  providers: [],
+  providers: [  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

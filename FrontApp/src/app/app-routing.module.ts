@@ -6,7 +6,8 @@ import { LoginVolunteerComponent } from './login-volunteer/login-volunteer.compo
 import { WelcomePageComponent } from './welcome-page/welcome-page.component';
 import { HomePageComponent } from './home-page/home-page.component';
 import { HomeComponent } from './home/home.component';
-import { roleGuardGuard } from './guard/role-guard.guard';
+import { SettingsComponent } from './settings/settings.component';
+import { UserProfileComponent } from './user-profile/user-profile.component';
 
 const routes: Routes = [
   {path:'sign-up-volunteer', component: RegistrationPageComponent},
@@ -14,8 +15,10 @@ const routes: Routes = [
   {path:'login', component:LoginVolunteerComponent},
   {path:'welcome-page', component: WelcomePageComponent},
   {path:'', redirectTo:'welcome-page',pathMatch: 'full'},
-  {path:'home' , component:HomePageComponent},
-  {path:'home2',component:HomeComponent ,canActivate: [roleGuardGuard('ADMIN')]}
+  {path:'home',component:HomeComponent },
+  {path:'settings',component:SettingsComponent },
+  {path: 'user-profile', component:UserProfileComponent},
+
 
 ];
 

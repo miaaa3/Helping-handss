@@ -1,29 +1,31 @@
 import { HttpClient } from '@angular/common/http';
 import { Inject,Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, tap } from 'rxjs';
+import { Volunteer } from '../models/volunteer';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private roles: string[] = [];
+  
+  private baseUrl;
 
-  constructor() {
-    // Retrieve roles from sessionStorage when the AuthService is initialized
-    const rolesJson = sessionStorage.getItem('userRoles');
-    if (rolesJson) {
-      this.roles = JSON.parse(rolesJson);
-    }
-  }
+  constructor(private http: HttpClient) {
+    this.baseUrl = 'http://localhost:8080/auth';
+  
+   }
 
-  setRoles(roles: string[]): void {
-    this.roles = roles;
-    // Store roles in sessionStorage
-    sessionStorage.setItem('userRoles', JSON.stringify(roles));
+  registerVolunteer(registerRequest: any): Observable<any> {
+    return this.http.post(this.baseUrl+ '/register/volunteer', registerRequest);
   }
 
-  hasRole(role: string): boolean {
-    return this.roles.includes(role);
+  registerOrganization(registerRequest: any): Observable<any> {
+    return this.http.post(this.baseUrl+ '/register/organization', registerRequest);
   }
+
+  login(authenticationRequest: any): Observable<any> {
+    return this.http.post(this.baseUrl+ '/login', authenticationRequest);
   }
+
+}
 

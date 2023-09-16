@@ -1,53 +1,55 @@
 import { Component, OnInit } from '@angular/core';
-import { VolunteerServiceService } from '../services/volunteerservice';
 import { AuthenticationRequest } from '../models/authentication-request';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
+import { AuthenticationResponse } from '../models/authentication-response';
+import { TokenStorageService } from '../services/token-storage.service';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-login-volunteer',
   templateUrl: './login-volunteer.component.html',
   styleUrls: ['./login-volunteer.component.css']
 })
-export class LoginVolunteerComponent {
-  authenticationRequest: AuthenticationRequest = {
-    email: '',
-    password: ''
-  };
-  toastr: any;
+export class LoginVolunteerComponent implements OnInit{
+  authenticationRequest: AuthenticationRequest = {} as AuthenticationRequest;
+  authenticationResponse: AuthenticationResponse = {} as AuthenticationResponse; 
+  isToastVisible = false;
+  errorMessage: any; 
+  isLoggedIn= false;
+  roles:string[]=[]
 
-  constructor(private volunteerService : VolunteerServiceService, private router: Router,  private toastr: ToastrService) {}
+  constructor(private authService : AuthService, private router: Router,  private toastr: ToastrService, private tokenStorage: TokenStorageService) {}
+
+    ngOnInit(): void {
+     
+      }
+   
   login() {
-    this.volunteerService.login(this.authenticationRequest).subscribe({
+    this.authService.login(this.authenticationRequest).subscribe({
       next: (response) => {
-        // Check if you receive a successful response from the backend
         if (response && response.statusCodeValue === 200) {
-          // Successful login, navigate to the home page
-          this.router.navigate(['/home2']);
+          this.tokenStorage.saveToken(response.body.access_token);
+          this.tokenStorage.saveVolunteerID(response.body.id);
+          this.isLoggedIn=true;
+          this.router.navigate(['/home']);
         } else {
-          // Extract error message from the response body
-          const errorMessage = response.body;
-  
-          // Display the error message to the user
-          this.toastr.error(errorMessage, 'Login Failed', {
-            timeOut: 3000,
-            progressBar: true,
-            closeButton: true,
-            enableHtml: true
-          });
+          this.errorMessage = response.body;
+          this.showToast( ); 
         }
-      },
-      error: (error) => {
-        // Handle other error cases here
-        console.error('Unexpected error:', error);
-  
-        // Display a generic error message to the user
-        this.toastr.error('An unexpected error occurred', 'Login Failed', {
-          timeOut: 3000,
-          progressBar: true,
-          closeButton: true,
-          enableHtml: true
-        });
       }
     });
   }
-}
+  
+  reloadPage(){
+    window.location.reload;
+  }
+  
+  showToast() {
+    this.isToastVisible = true;
+    
+    setTimeout(() => {
+      this.isToastVisible = false;
+    }, 5000); 
+  }
+}  

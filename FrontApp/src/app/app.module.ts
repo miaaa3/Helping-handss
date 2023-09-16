@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatChipsModule } from '@angular/material/chips';
@@ -25,19 +25,28 @@ import { MainNavbarComponent } from './main-navbar/main-navbar.component';
 import { HomeComponent } from './home/home.component';
 import { MainSidebarComponent } from './main-sidebar/main-sidebar.component';
 import { ToastrModule, ToastrService } from 'ngx-toastr';
+import { PostComponent } from './post/post.component';
+import { DatePipe } from '@angular/common';
+import { SettingsComponent } from './settings/settings.component';
+import jwtDecode from 'jwt-decode';
+import { UserProfileComponent } from './user-profile/user-profile.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     RegistrationPageComponent,
     RegistrationPageOrganizationComponent,
-    LoginVolunteerComponent,
     WelcomePageComponent,
     NavbarWelcomepageComponent,
     HomePageComponent,
     MainNavbarComponent,
     HomeComponent,
     MainSidebarComponent,
+    LoginVolunteerComponent,
+    PostComponent,
+    SettingsComponent,
+    UserProfileComponent,
+    
     
   ],
   imports: [
@@ -59,7 +68,9 @@ import { ToastrModule, ToastrService } from 'ngx-toastr';
     ToastrModule.forRoot()
     
   ],
-  providers: [  ],
-  bootstrap: [AppComponent]
+  providers: [ DatePipe],
+  bootstrap: [AppComponent],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+
 })
 export class AppModule { }

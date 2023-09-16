@@ -1,0 +1,12 @@
+/* Example CSS */
+.chip-item {
+    display: flex;
+    align-items: center; 
+    justify-content: center;
+  }
+  
+  .check-icon {
+    width: 20px;
+    margin-top: 5px;
+  }
+  

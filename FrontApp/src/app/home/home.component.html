@@ -1,14 +1,15 @@
 <app-main-navbar></app-main-navbar>
 
-<div class="bg-gray-200 font-rale flex ">
+<div class="bg-gray-200 font-rale ">
 
+<div class="flex">
 <!--LEFT SIDEBAR AREA-->
 <div class="left-sidebar-area w-56 h-full mt-[150px] ">
 <!--MY PROFILE-->
 <div class="  h-screen flex justify-start items-start mt-5 pl-4 mb-3">
     <div class="card w-52 bg-white-chalk shadow-xl rounded-lg hover:shadow">
        <img class="w-28 mx-auto rounded-full -mt-20 border-8 border-white" src="https://avatars.githubusercontent.com/u/67946056?v=4" alt="">
-       <div class="text-center mt-0.5 text-2xl font-semibold font-rale ">Ajo Alex</div>
+       <div class="text-center mt-0.5 text-2xl font-semibold font-rale ">{{volunteer.firstName}}  {{volunteer.lastName}}</div>
        <div class="text-center mt-0.5 font-light text-sm">@devpenzil</div>
        <hr class="mt-6">
        <div class="flex p-2">
@@ -70,59 +71,46 @@
 </div>
 <!--END LEFT SIDEBAR AREA-->
 
+
 <!--NEW FEED AREA-->
-<div class="p-4 mt-24 flex justify-center items-center w-[813px] flex-col  ">
-
-    <!--CREATE POST-->
-    <div class="mb-6 mx-auto w-full flex flex-col text-gray-800 border border-gray-300 p-4 rounded-xl -ml- shadow-lg max-w-2xl">
-    <textarea class="description bg-gray-100 sec p-3 h-32 border border-gray-300 outline-none" spellcheck="false" placeholder="Describe everything about this post here"></textarea>
+<div class="p-4 mt-24 flex  items-center w-[813px] flex-col  ">
+ 
+  <!-- CREATE POST -->
+  <div class=" mx-auto w-full flex flex-col text-gray-800 border border-gray-300 p-4 rounded-xl bg-white-chalk shadow-lg max-w-2xl">
+    <div class="inline-flex items-center">
+        <img class="w-10 mx-3  rounded-full " src="https://avatars.githubusercontent.com/u/67946056?v=4" alt="">
+        <textarea class="description text-base  bg-gray-100 sec p-3 h-11 w-full border rounded-xl border-gray-300 outline-none overflow-hidden" spellcheck="false" name="content" placeholder="Describe everything about this post here" [(ngModel)]="post.content" ></textarea>
+    </div>    
+    <div class="flex items-center ml-2 mt-3">
+        <img class="mr-2 cursor-pointer  rounded-full p-1 h-8" src="assets/images/icon-location.png">        
+        <div class="flex items-center justify-center w-8 h-4">
+            <label for="dropzone-file" class="flex flex-col items-center justify-center w-full h-6 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
+                <div class="flex flex-col items-center justify-center ">
+                    <svg class=" h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
+                    </svg>
+                </div>
+                <input id="dropzone-file" type="file" class="hidden" (change)="onFileSelected($event)" />
+            </label>
+        </div> 
+        <div class="btn ml-auto  px-2.5 py-1.5 font-semibold cursor-pointer rounded-md bg-green  text-center align-middle text-sm uppercase text-white shadow-md shadow-green-light/10 transition-all hover:shadow-lg hover:shadow-green-light/50 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none" (click)="createPost()">Post</div>
+    </div>
+  </div>
+  <!-- END CREATE POST -->
     
-    <!-- icons -->
-    <div class="icons flex text-gray-500 mt-2 ">
-      <svg class="mr-2 cursor-pointer hover:text-gray-700 border rounded-full p-1 h-7" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
-      <svg class="mr-2 cursor-pointer hover:text-gray-700 border rounded-full p-1 h-7" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" /></svg>
-    </div>
-    <!-- buttons -->
-    <div class="buttons flex justify-end">
-        <div class="btn border px-3 font-semibold cursor-pointer rounded-lg bg-green py-2  text-center align-middle text-sm uppercase text-white shadow-md shadow-green-light/10 transition-all hover:shadow-lg hover:shadow-green-light/50 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none">Post</div>
-    </div>
-    </div>   
-    <!--END CREATE POST-->
 
-    <!--ALL POST-->
-    <div class=" w-full flex justify-center ">
-        <div class="mx-14 bg-white rounded-xl overflow-hidden cursor-pointer shadow-lg ">
-            <div class="p-4">
-                <img class="rounded-xl" src="https://images.unsplash.com/photo-1599839575945-a9e5af0c3fa5?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1049&q=80" alt="Dog" />
-            </div>
-            <div class="flex justify-between p-6">
-                <div class="flex items-center space-x-4">
-                    <img class="h-10 rounded-full" src="https://images.unsplash.com/photo-1583512603805-3cc6b41f3edb?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&q=80" alt="" />
-                    <h1 class="text-lg text-gray-900 font-bold">Felipe Sacudon</h1>
-                </div>
-                <div class="flex space-x-6 items-center">
-                    <div class="flex space-x-2 items-center">
-                        <span><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z" /></svg>
-                        </span>
-                        <span class="text-gray-700 font-semibold">20</span>
-                    </div>
-                    <div class="flex space-x-2 items-center pr-4">
-                        <span><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-600 hover:text-red-500" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd" /></svg>
-                        </span>
-                        <span class="text-gray-700 font-semibold">22</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- END ALL POST-->
+  <!--ALL POST-->
+  <div class=" w-full flex justify-center  ">
+      <app-post></app-post>
+  </div>
+  <!-- END ALL POST-->
 </div>
 <!--END NEW FEED AREA-->
 
+
+
 <!-- RIGHT SIDEBAR AREA -->
-  <div class="right-sidebar-area text-gray-800 shadow-md rounded-lg inline-block " data-simplebar>
+  <div class="right-sidebar-area text-gray-800 shadow-md rounded-lg  " data-simplebar>
     <div class="recent-chat-box font-rale font-semibold ">
         <div class="title">
             <h3>Recent Chat</h3>
@@ -138,7 +126,7 @@
         <div class="chat-body" data-simplebar>
             <div class="chat-item">
                 <a href="#"><img src="assets/images/users-img.jpg" class="rounded-circle rounded-2xl" alt="image"></a>
-                <span class="name"><a href="#">Stephan Redding</a></span>
+                <span class="name"><a>Stephan Redding</a></span>
                 <span class="status-online"></span>
             </div>
             <div class="chat-item">
@@ -171,3 +159,5 @@
 <!-- END RIGHT SIDEBAR AREA -->
 </div>
 </div>
+</div>
+

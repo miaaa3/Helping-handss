@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { VolunteerServiceService } from '../services/volunteerservice';
+import { UserService } from '../services/user.service';
 import { Router } from '@angular/router';
 import { TokenStorageService } from '../services/token-storage.service';
 import { Volunteer } from '../models/volunteer';
@@ -25,7 +25,7 @@ export class SettingsComponent {
   ];
 
   volunteer: Volunteer = {} as Volunteer; // Initialize an empty Volunteer object
-  constructor(private volunteerService : VolunteerServiceService, private router : Router, private tokenStorage : TokenStorageService){}
+  constructor(private  userService: UserService, private router : Router, private tokenStorage : TokenStorageService){}
 
   selectedInterests: Set<string> = new Set();
 
@@ -45,7 +45,7 @@ export class SettingsComponent {
   email = this.tokenStorage.getVolunteerEmail()?.toString() ?? '' ;
 
   onSubmit(): void {
-    this.volunteerService.updateVolunteer(this.volunteer,this.email).subscribe(
+    this.userService.updateVolunteer(this.volunteer,this.email).subscribe(
       response => {
         console.log('Registration successful:', response);
        

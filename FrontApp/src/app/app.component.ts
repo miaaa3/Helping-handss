@@ -1,23 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { TokenStorageService } from './services/token-storage.service';
+import { TokenStorageService, USER_ID } from './services/token-storage.service';
+import { UserService } from './services/user.service'; 
+import { User } from './models/user';
+import { UserDataService } from './services/user-data.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnInit {
+export class AppComponent  {
   title = 'FrontApp';
-  isLoggedIn = false;
-  roles : string[]=[];
 
-  constructor(private tokenStorageService:TokenStorageService){}
-
-  ngOnInit(): void {
-      this.isLoggedIn=!!this.tokenStorageService.getToken();
-
-      if(this.isLoggedIn){
-        const volunteer = this.tokenStorageService.getVolunteerEmail();
-      }
-  }
 }

@@ -22,6 +22,7 @@
     "@angular/router": "^16.2.0",
     "@auth0/angular-jwt": "^5.1.2",
     "@uploadcare/blocks": "^0.25.6",
+    "date-fns": "^2.30.0",
     "jwt-decode": "^3.1.2",
     "ngx-toastr": "^17.0.2",
     "rxjs": "~7.8.0",

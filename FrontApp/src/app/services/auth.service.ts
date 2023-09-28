@@ -2,29 +2,31 @@ import { HttpClient } from '@angular/common/http';
 import { Inject,Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, Subject, tap } from 'rxjs';
 import { Volunteer } from '../models/volunteer';
+import { AuthenticationRequest } from '../models/authentication-request';
+import { AuthenticationResponse } from '../models/authentication-response';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
   
-  private baseUrl;
+  private authUrl;
 
   constructor(private http: HttpClient) {
-    this.baseUrl = 'http://localhost:8080/auth';
+    this.authUrl = 'http://localhost:8080/auth';
   
    }
 
   registerVolunteer(registerRequest: any): Observable<any> {
-    return this.http.post(this.baseUrl+ '/register/volunteer', registerRequest);
+    return this.http.post(this.authUrl+ '/register/volunteer', registerRequest);
   }
 
   registerOrganization(registerRequest: any): Observable<any> {
-    return this.http.post(this.baseUrl+ '/register/organization', registerRequest);
+    return this.http.post(this.authUrl+ '/register/organization', registerRequest);
   }
 
-  login(authenticationRequest: any): Observable<any> {
-    return this.http.post(this.baseUrl+ '/login', authenticationRequest);
+    login(authenticationRequest: AuthenticationRequest): Observable<AuthenticationResponse> {
+    return this.http.post<AuthenticationResponse>(`${this.authUrl}/login`, authenticationRequest)
   }
 
 }

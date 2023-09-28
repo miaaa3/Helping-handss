@@ -21,7 +21,7 @@ export class TokenStorageService {
     return sessionStorage.getItem(TOKEN_KEY)
   }
 
-  public saveVolunteerID(id:any){
+  public saveUserID(id:any){
     window.sessionStorage.removeItem(USER_ID);
     window.sessionStorage.setItem(USER_ID,id)
   }

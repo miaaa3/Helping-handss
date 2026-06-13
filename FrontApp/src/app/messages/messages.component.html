@@ -1,0 +1,27 @@
+<app-main-navbar></app-main-navbar>
+
+<div class="bg-gray-200 font-rale min-h-screen">
+  <div class="pt-24 px-4 pb-6 max-w-5xl mx-auto">
+    <div class="flex h-[75vh] rounded-xl bg-white-chalk shadow-lg overflow-hidden">
+
+      <!-- CONVERSATIONS -->
+      <div class="w-full sm:w-80 border-r border-gray-200 flex-shrink-0" [ngClass]="{ 'hidden sm:block': selectedConversation }">
+        <app-conversation-list
+          [conversations]="conversations"
+          [selectedUserId]="selectedConversation?.otherUserId ?? null"
+          (select)="selectConversation($event)"
+        ></app-conversation-list>
+      </div>
+
+      <!-- CHAT WINDOW -->
+      <div class="flex-1" [ngClass]="{ 'hidden sm:block': !selectedConversation }">
+        <app-chat-window
+          [otherUserId]="selectedConversation?.otherUserId ?? null"
+          [otherUserName]="selectedConversation?.otherUserName ?? ''"
+          [otherUserProfile]="selectedConversation?.otherUserProfile ?? ''"
+        ></app-chat-window>
+      </div>
+
+    </div>
+  </div>
+</div>

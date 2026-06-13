@@ -5,8 +5,11 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';  
 import { MatDividerModule } from '@angular/material/divider';  
-import { MatButtonModule } from '@angular/material/button';    
+import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatInputModule } from '@angular/material/input';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -29,6 +32,11 @@ import { UserProfileComponent } from './user-profile/user-profile.component';
 import { HttpInterceptorService } from './services/http-interceptor.service';
 import { RegistrationPageComponent } from './volunteer-registration-page/registration-page.component';
 import { AuthGuard } from './guard/auth.guard';
+import { DonateDialogComponent } from './donation/donate-dialog/donate-dialog.component';
+import { MyDonationsComponent } from './donation/my-donations/my-donations.component';
+import { MessagesComponent } from './messages/messages.component';
+import { ConversationListComponent } from './messages/conversation-list/conversation-list.component';
+import { ChatWindowComponent } from './messages/chat-window/chat-window.component';
 
 @NgModule({
   declarations: [
@@ -44,8 +52,12 @@ import { AuthGuard } from './guard/auth.guard';
     PostComponent,
     SettingsComponent,
     UserProfileComponent,
-    
-    
+    DonateDialogComponent,
+    MyDonationsComponent,
+    MessagesComponent,
+    ConversationListComponent,
+    ChatWindowComponent,
+
   ],
   imports: [
     BrowserModule,
@@ -58,13 +70,16 @@ import { AuthGuard } from './guard/auth.guard';
     ReactiveFormsModule,
     MatButtonModule,
     MatCheckboxModule,
+    MatDialogModule,
+    MatInputModule,
+    MatProgressSpinnerModule,
     FormsModule,
     MatFormFieldModule,
     MatIconModule,
     HttpClientModule,
     RouterModule,
     ToastrModule.forRoot()
-    
+
   ],
   providers: [ DatePipe,
     {

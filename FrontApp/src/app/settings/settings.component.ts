@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { UserService } from '../services/user.service';
 import { Router } from '@angular/router';
 import { TokenStorageService } from '../services/token-storage.service';
@@ -9,7 +9,7 @@ import { Volunteer } from '../models/volunteer';
   templateUrl: './settings.component.html',
   styleUrls: ['./settings.component.css']
 })
-export class SettingsComponent {
+export class SettingsComponent implements OnInit {
   interests: string[] = [
     "Environmental Conservation",
     "Animal Welfare",
@@ -29,6 +29,21 @@ export class SettingsComponent {
 
   selectedInterests: Set<string> = new Set();
 
+  ngOnInit(): void {
+    this.userService.getUser().subscribe({
+      next: (response: any) => {
+        const user = response?.user as Volunteer;
+        if (user) {
+          this.volunteer = user;
+          (user.interests ?? []).forEach(interest => this.selectedInterests.add(interest));
+        }
+      },
+      error: (error) => {
+        console.error('Failed to load profile:', error);
+      }
+    });
+  }
+
   isSelected(interest: string): boolean {
     return this.selectedInterests.has(interest);
 
@@ -37,25 +52,22 @@ export class SettingsComponent {
   toggleSelection(interest: string): void {
     if (this.isSelected(interest)) {
       this.selectedInterests.delete(interest);
-      console.log(this.tokenStorage.getToken);
     } else {
       this.selectedInterests.add(interest);
     }
   }
-  email = this.tokenStorage.getVolunteerEmail()?.toString() ?? '' ;
 
   onSubmit(): void {
-    this.userService.updateVolunteer(this.volunteer,this.email).subscribe(
-      response => {
-        console.log('Registration successful:', response);
-       
-        this.router.navigate(['/home2'])
+    this.volunteer.interests = Array.from(this.selectedInterests);
+    this.userService.updateVolunteer(this.volunteer).subscribe({
+      next: (response) => {
+        console.log('Profile updated:', response);
+        this.router.navigate(['/home']);
       },
-      error => {
-        console.error('Registration failed:', error);
+      error: (error) => {
+        console.error('Profile update failed:', error);
       }
-    );
+    });
   }
-  
-}
 
+}

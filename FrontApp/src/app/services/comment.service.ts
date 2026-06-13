@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import {  USER_ID } from './token-storage.service';
 import { Observable } from 'rxjs/internal/Observable';
 import { Comment } from '../models/comment';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,7 @@ export class CommentService {
   commentUrl:string;
 
   constructor(private http: HttpClient) {
-    this.commentUrl = 'http://localhost:8080/api/comments';
+    this.commentUrl = `${environment.apiUrl}api/comments`;
   }
 
   createComment(content: string, postId:any): Observable<any> {

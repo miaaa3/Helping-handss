@@ -9,6 +9,11 @@
 			<time class="text-gray-400 text-xs">{{ post.createdAt | date:'full' }}</time>
 		  </div>
 		</div>
+		<button *ngIf="users[i].role === 'ORGANIZATION' && users[i].id !== userId"
+				(click)="openDonateDialog(users[i])"
+				class="bg-emerald-500 hover:bg-emerald-600 text-white text-sm font-medium px-4 py-1.5 rounded-full transition-colors">
+			Donate
+		</button>
 		<div (click)="toggleDropdown()"  class="bg-gray-100 rounded-full h-3.5 flex items-center justify-center cursor-pointer" *ngIf="users[i].id === userId">
 		  <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="34px" fill="#92929D">
 			<path d="M0 0h24v24H0V0z" fill="none" />

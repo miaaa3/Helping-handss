@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { Volunteer } from '../models/volunteer';
 
 export const TOKEN_KEY ='auth-token-volunteer';
-const VOLUNTEER_KEY='auth-volunteer';
 export const USER_ID='user-id'
 
 @Injectable({
@@ -26,11 +25,11 @@ export class TokenStorageService {
     window.sessionStorage.setItem(USER_ID,id)
   }
 
-  public getVolunteerEmail(){
-    return window.sessionStorage.getItem(VOLUNTEER_KEY)
-  }
-
   public getVolunteerId(){
     return window.sessionStorage.getItem(USER_ID);
+  }
+
+  public clear(){
+    window.sessionStorage.clear();
   }
 }

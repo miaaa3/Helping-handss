@@ -5,6 +5,7 @@ import {  Observable, Subject } from 'rxjs';
 import { User } from '../models/user';
 import { follow } from '../models/follow';
 import { SearchResult } from '../models/searchResult';
+import { environment } from 'src/environments/environment';
 
 
 @Injectable({
@@ -17,7 +18,7 @@ export class UserService {
 
 
   constructor(private http: HttpClient) {
-    this.userUrl = 'http://localhost:8080/api/users';
+    this.userUrl = `${environment.apiUrl}api/users`;
   }
 
   public getUser(){
@@ -25,8 +26,8 @@ export class UserService {
   }
 
 
-  public updateVolunteer(volunteer : Volunteer, email:string){
-    return this.http.post<User>(`${this.userUrl}/updateVolunteer`, email);
+  public updateVolunteer(volunteer : Volunteer){
+    return this.http.put<User>(`${this.userUrl}/updateVolunteer`, volunteer);
   }
 
   searchUsers(keyword: string): Observable<SearchResult[]> {

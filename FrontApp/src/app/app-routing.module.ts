@@ -8,6 +8,8 @@ import { SettingsComponent } from './settings/settings.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { AuthGuard } from './guard/auth.guard';
 import { LoginComponent } from './login/login.component';
+import { MyDonationsComponent } from './donation/my-donations/my-donations.component';
+import { MessagesComponent } from './messages/messages.component';
 
 const routes: Routes = [
   {path:'sign-up-volunteer', component: RegistrationPageComponent},
@@ -16,8 +18,10 @@ const routes: Routes = [
   {path:'welcome-page', component: WelcomePageComponent},
   {path:'', redirectTo:'welcome-page',pathMatch: 'full'},
   {path:'home',component:HomeComponent,canActivate:[AuthGuard] },
-  {path:'settings',component:SettingsComponent },
-  {path: 'user-profile', component:UserProfileComponent},
+  {path:'settings',component:SettingsComponent, canActivate:[AuthGuard] },
+  {path: 'user-profile', component:UserProfileComponent, canActivate:[AuthGuard]},
+  {path: 'my-donations', component:MyDonationsComponent, canActivate:[AuthGuard]},
+  {path: 'messages', component:MessagesComponent, canActivate:[AuthGuard]},
 
 
 ];

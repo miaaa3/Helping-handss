@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { follow } from '../models/follow';
 import { User } from '../models/user';
+import { environment } from 'src/environments/environment';
 
 
 @Injectable({
@@ -11,7 +12,7 @@ export class FollowService {
   followUrl: string;
 
   constructor(private http: HttpClient) {
-    this.followUrl = 'http://localhost:8080/api/follow';
+    this.followUrl = `${environment.apiUrl}api/follow`;
   }
 
   getFollowing() {
@@ -21,7 +22,7 @@ export class FollowService {
   follow(userId:number){
     const formData = new FormData();
     formData.append('userId', ''+userId);
-    return this.http.post<follow>(`http://localhost:8080/api/follow/follow?userId=`,formData);
-    
+    return this.http.post<follow>(`${this.followUrl}/follow`, formData);
+
   }
 }

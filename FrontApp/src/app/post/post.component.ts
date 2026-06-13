@@ -8,6 +8,8 @@ import { USER_ID } from '../services/token-storage.service';
 import { User } from '../models/user';
 import { Post } from '../models/post';
 import { Comment } from '../models/comment';
+import { MatDialog } from '@angular/material/dialog';
+import { DonateDialogComponent } from '../donation/donate-dialog/donate-dialog.component';
 
 @Component({
   selector: 'app-post',
@@ -28,7 +30,7 @@ export class PostComponent implements OnInit {
   showDropdownNotif = false;
   showAllComments = false
 
-  constructor(private postService: PostService,private likeService: LikeService,private commentService: CommentService,private formBuilder: FormBuilder) {
+  constructor(private postService: PostService,private likeService: LikeService,private commentService: CommentService,private formBuilder: FormBuilder,private dialog: MatDialog) {
       this.commentForm = this.formBuilder.group({
         comment: ['', Validators.required],
       });
@@ -114,6 +116,16 @@ export class PostComponent implements OnInit {
   }
   toggleCommentsDisplay() {
     this.showAllComments = !this.showAllComments;
+  }
+
+  openDonateDialog(organization: User) {
+    this.dialog.open(DonateDialogComponent, {
+      width: '420px',
+      data: {
+        organizationId: organization.id,
+        organizationName: organization.name
+      }
+    });
   }
 
 }

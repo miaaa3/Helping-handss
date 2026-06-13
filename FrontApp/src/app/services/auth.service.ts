@@ -4,17 +4,17 @@ import { BehaviorSubject, Observable, Subject, tap } from 'rxjs';
 import { Volunteer } from '../models/volunteer';
 import { AuthenticationRequest } from '../models/authentication-request';
 import { AuthenticationResponse } from '../models/authentication-response';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  
+
   private authUrl;
 
   constructor(private http: HttpClient) {
-    this.authUrl = 'http://localhost:8080/auth';
-  
+    this.authUrl = `${environment.apiUrl}auth`;
    }
 
   registerVolunteer(registerRequest: any): Observable<any> {

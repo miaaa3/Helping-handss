@@ -4,6 +4,7 @@ import { Post } from '../models/post';
 import { Observable } from 'rxjs';
 import { USER_ID } from './token-storage.service';
 import { PostDTO } from '../models/postDTO';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +14,7 @@ export class PostService {
   private userId: any;
 
   constructor(private http: HttpClient) {
-    this.postUrl = 'http://localhost:8080/api/posts';
+    this.postUrl = `${environment.apiUrl}api/posts`;
     this.userId = sessionStorage.getItem(USER_ID);
   }
 
@@ -23,7 +24,7 @@ export class PostService {
   }
 
   constructImageUrls(posts: Post[]) {
-    const baseUrl = 'http://localhost:8081/';
+    const baseUrl = `${environment.apiUrl}uploads/`;
     posts.forEach((post) => {
       post.media.forEach((media) => {
         media.file = baseUrl + media.fileName;

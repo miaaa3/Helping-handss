@@ -1,0 +1,50 @@
+<div class="flex flex-col h-full">
+
+  <!-- EMPTY STATE -->
+  <div *ngIf="!otherUserId" class="flex-1 flex items-center justify-center text-gray-400 font-rale text-sm">
+    Select a conversation to start chatting.
+  </div>
+
+  <ng-container *ngIf="otherUserId">
+    <!-- HEADER -->
+    <div class="flex items-center gap-3 px-4 py-3 border-b border-gray-200">
+      <img
+        [src]="otherUserProfile || 'assets/images/default-avatar.png'"
+        class="w-10 h-10 rounded-full object-cover border border-gray-200"
+        alt=""
+      />
+      <span class="font-semibold font-rale">{{ otherUserName }}</span>
+    </div>
+
+    <!-- MESSAGES -->
+    <div #scrollContainer class="flex-1 overflow-y-auto px-4 py-3 space-y-2 bg-gray-50">
+      <div *ngFor="let message of messages" class="flex" [ngClass]="isMine(message) ? 'justify-end' : 'justify-start'">
+        <div
+          class="max-w-xs sm:max-w-md px-3 py-2 rounded-2xl text-sm"
+          [ngClass]="isMine(message) ? 'bg-green text-white rounded-br-sm' : 'bg-white text-gray-800 border border-gray-200 rounded-bl-sm'"
+        >
+          <p class="whitespace-pre-wrap break-words">{{ message.content }}</p>
+          <span class="block mt-1 text-[10px] opacity-70 text-right">{{ message.createdAt | date: 'shortTime' }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- COMPOSER -->
+    <div class="flex items-center gap-2 px-4 py-3 border-t border-gray-200">
+      <input
+        type="text"
+        [(ngModel)]="newMessage"
+        (keydown.enter)="send()"
+        placeholder="Type a message..."
+        class="flex-1 px-4 py-2 text-sm border border-gray-300 rounded-full outline-none focus:ring-2 focus:ring-green-light focus:border-green"
+      />
+      <button
+        (click)="send()"
+        [disabled]="!newMessage.trim()"
+        class="px-4 py-2 rounded-full bg-green text-white text-sm font-semibold uppercase shadow-md shadow-green-light/10 transition-all hover:shadow-lg hover:shadow-green-light/50 disabled:opacity-50 disabled:pointer-events-none"
+      >
+        Send
+      </button>
+    </div>
+  </ng-container>
+</div>

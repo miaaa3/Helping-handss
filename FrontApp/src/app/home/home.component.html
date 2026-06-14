@@ -1,127 +1,114 @@
 <app-main-navbar></app-main-navbar>
 
-<div class="bg-gray-200 font-rale ">
+<div class="bg-gray-200 font-rale min-h-screen">
+<div class="flex max-w-7xl mx-auto">
 
-<div class="flex">
-<!--LEFT SIDEBAR AREA-->
-<div class="left-sidebar-area w-56 h-full mt-[150px] hidden  lg:block ">
-<!--MY PROFILE-->
-<div class=" flex justify-start items-start mt-5 pl-4 mb-3">
-    <div class="card w-52 bg-white-chalk shadow-xl rounded-lg hover:shadow">
-       <img class="w-28 mx-auto rounded-full -mt-20 border-8 border-white" [src]="user.profile" alt="">
-       <div class="text-center mt-0.5 text-2xl font-semibold font-rale ">{{user.name}}</div>
-       <div class="text-center mt-0.5 font-light text-sm">{{user.fullName}}</div>
-       <hr class="mt-6">
-       <div class="flex p-2">
-         <div class="w-1/2 text-center text-sm">
-           <span class="font-bold">{{numberOfFollowers}} <br></span> Followers
-         </div>
-         <div class="w-0 border border-gray-300">
-           
-         </div>
-         <div class="w-1/2 text-center text-sm">
-           <span class="font-bold">{{numberOfFollowing}} <br></span> Following
-         </div>
-       </div>
-    </div>
-  </div>                           
-<!--MY PROFILE-->
-<!--EVENTS-->
-<div class=" mt-0 pl-4 z-0 ">
-    <div class="relative flex w-52 flex-col rounded-xl bg-white bg-clip-border text-gray-800 shadow-md ">
-        <div class="relative mx-4 mt-5 h-16 overflow-hidden rounded-xl bg-gray-500 bg-clip-border text-white shadow-lg shadow-gray-500/40">
-          <img
-            src="https://images.unsplash.com/photo-1540553016722-983e48a2cd10?ixlib=rb-1.2.1&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=crop&amp;w=800&amp;q=80"
-            alt="img-blur-shadow"
-            layout="fill"/>
+<!--LEFT SIDEBAR: profile summary + nav shortcuts-->
+<aside class="left-sidebar-area w-64 hidden lg:block mt-24 px-4">
+  <div class="sticky top-24 flex flex-col gap-4">
+
+    <!--PROFILE SUMMARY-->
+    <div class="bg-white-chalk rounded-xl shadow-md overflow-hidden">
+      <div class="h-14 bg-gradient-to-r from-green to-green-dark"></div>
+      <div class="px-4 pb-4 -mt-8 flex flex-col items-center text-center">
+        <a routerLink="/user-profile" class="flex flex-col items-center">
+          <img class="w-16 h-16 rounded-full border-4 border-white-chalk object-cover" [src]="user.profile" alt="">
+          <div class="mt-2 font-semibold capitalize hover:underline">{{user.name}}</div>
+        </a>
+        <div class="text-xs text-gray-500">{{user.fullName}}</div>
+        <div class="flex w-full mt-3 pt-3 border-t border-gray-200 justify-around text-xs">
+          <div class="text-center"><span class="font-bold block">{{numberOfFollowers}}</span>Followers</div>
+          <div class="text-center"><span class="font-bold block">{{numberOfFollowing}}</span>Following</div>
         </div>
-        <div class="p-5 pb-0 font-sans text-xs">
-          <h5 class="mb-1 block text-lg font-semibold leading-snug tracking-normal text-blue-gray-900 antialiased">
-            Event</h5>
-          <p class="block font-light leading-relaxed text-inherit antialiased">Wednesday 10am</p>
-        </div>
-        <div class="p-4 pb-2 pt-0 flex justify-end  ">
-          <button
-            class="select-none w-18 h-9 rounded-lg bg-green py-3 px-3 text-center align-middle  text-xs font-bold uppercase text-white shadow-md shadow-green-light/10 transition-all hover:shadow-lg hover:shadow-green-light/50 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-            type="button"
-            data-ripple-light="true">Apply</button>
-        </div>
-        <hr class="h-px mx-6 my-4 bg-gray-300 border-0 dark:bg-gray-500">
-        <div class="relative mx-4 mt-2 h-16 overflow-hidden rounded-xl bg-gray-500 bg-clip-border text-white shadow-lg shadow-blue-gray-500/40">
-            <img
-              src="https://images.unsplash.com/photo-1540553016722-983e48a2cd10?ixlib=rb-1.2.1&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=crop&amp;w=800&amp;q=80"
-              alt="img-blur-shadow"
-              layout="fill"/>
-          </div>
-          <div class="p-5 pb-0 font-sans text-xs">
-            <h5 class="mb-1 block text-lg font-semibold leading-snug tracking-normal text-blue-gray-900 antialiased">
-             Event
-          </h5>
-            <p class="block font-light leading-relaxed text-inherit antialiased">Wednesday 10am</p>
-          </div>
-          <div class="p-4 pt-0 flex justify-end  ">
-            <button
-              class="select-none w-18 h-9 rounded-lg bg-green py-3 px-3 text-center align-middle font-sans text-xs font-bold uppercase text-white shadow-md shadow-green-light/10 transition-all hover:shadow-lg hover:shadow-green-light/50 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-              type="button"
-              data-ripple-light="true">Apply</button>
-          </div>
       </div>
     </div>
-<!--END EVENTS-->    
-</div>
-<!--END LEFT SIDEBAR AREA-->
+    <!--END PROFILE SUMMARY-->
+
+    <!--NAV SHORTCUTS-->
+    <app-main-sidebar></app-main-sidebar>
+    <!--END NAV SHORTCUTS-->
+  </div>
+</aside>
+<!--END LEFT SIDEBAR-->
 
 
-<!--NEW FEED AREA-->
-<div class="p-4 mt-24 flex  items-center w-full flex-col  ">
- 
-  <!-- CREATE POST -->
-  <div class=" mx-auto w-full flex flex-col text-gray-800 border border-gray-300 p-4 rounded-xl bg-white-chalk shadow-lg max-w-3xl">
-    <div class="inline-flex items-center">
-        <img class="w-10 mx-3  rounded-full " [src]="user.profile" alt="">
-        <textarea class="description text-base  bg-gray-100 sec p-3 h-11 w-full border rounded-xl border-gray-300 outline-none overflow-hidden" spellcheck="false" name="content" placeholder="Describe everything about this post here" [(ngModel)]="post.content" ></textarea>
-    </div>    
-    <div class="flex items-center ml-2 mt-3">
-        <img class="mr-2 cursor-pointer  rounded-full p-1 h-8" src="assets/images/icon-location.png">        
-        <div class="flex items-center justify-center w-8 h-4">
-            <label for="dropzone-file" class="flex flex-col items-center justify-center w-full h-6 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
-                <div class="flex flex-col items-center justify-center ">
-                    <svg class=" h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
-                    </svg>
-                </div>
-                <input id="dropzone-file" type="file" class="hidden" (change)="onFileSelected($event)" />
-            </label>
-        </div> 
-        <div class="btn ml-auto  px-2.5 py-1.5 font-semibold cursor-pointer rounded-md bg-green  text-center align-middle text-sm uppercase text-white shadow-md shadow-green-light/10 transition-all hover:shadow-lg hover:shadow-green-light/50 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none" (click)="createPost()">Post</div>
+<!--CENTER FEED-->
+<main class="flex-1 min-w-0 max-w-2xl mx-auto px-4 mt-24 pb-20 lg:pb-8 flex flex-col gap-4">
+
+  <!--CREATE POST-->
+  <div class="bg-white-chalk rounded-xl shadow-md p-4">
+    <div class="flex items-center gap-3">
+      <img class="w-10 h-10 rounded-full object-cover flex-shrink-0" [src]="user.profile" alt="">
+      <textarea
+        class="flex-1 bg-gray-100 rounded-2xl px-4 py-2.5 text-sm resize-none border border-transparent outline-none focus:border-green/40 transition-colors"
+        rows="1" spellcheck="false" name="content"
+        [placeholder]="'What\'s on your mind, ' + user.name + '?'"
+        [(ngModel)]="post.content"></textarea>
+    </div>
+    <div *ngIf="selectedFiles.length" class="text-xs text-gray-500 mt-2 pl-[52px]">
+      {{selectedFiles.length}} file(s) attached
+    </div>
+    <div class="flex items-center justify-between mt-3 pt-3 border-t border-gray-200">
+      <label for="dropzone-file" class="flex items-center gap-2 text-sm text-gray-500 hover:bg-gray-100 rounded-lg px-3 py-1.5 cursor-pointer transition-colors">
+        <svg class="w-5 h-5 text-green" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M3 16l4.586-4.586a2 2 0 012.828 0L16 17m-2-2l1.586-1.586a2 2 0 012.828 0L21 16M3 12V8a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2v-2zM11 9a1 1 0 11-2 0 1 1 0 012 0z"/>
+        </svg>
+        Photo/Video
+        <input id="dropzone-file" type="file" class="hidden" multiple (change)="onFileSelected($event)">
+      </label>
+      <button
+        class="bg-green text-white text-sm font-semibold px-6 py-1.5 rounded-full shadow-sm transition-all hover:shadow-md hover:bg-green-dark active:opacity-80"
+        (click)="createPost()">Post</button>
     </div>
   </div>
-  <!-- END CREATE POST -->
-    
+  <!--END CREATE POST-->
 
-  <!--ALL POST-->
-  <div class=" mx-auto w-full flex flex-col text-gray-800  p-4 rounded-xl max-w-3xl  ">
-      <app-post></app-post>
-  </div>
-  <!-- END ALL POST-->
-</div>
-<!--END NEW FEED AREA-->
-
-<!--RIGHT SIDE AREA-->
-<div class="mt-32 hidden lg:block" >
-  <div class="relative px-4 flex w-52 flex-col rounded-xl bg-white bg-clip-border text-gray-800 shadow-md ">
-    <h5 class="mt-3 block text-sm font-semibold leading-snug tracking-normal text-gray-900 antialiased underline decoration-gray-200">
-      Your list of following :
-   </h5>
-    <div class="relative h-16 overflow-hidden rounded-xl gap-2	flex items-center min-h-min" *ngFor="let f of following ">
-      <img [src]="user.profile" class="object-cover  rounded-full w-10 h-10" />
-      <div class="flex flex-col">
-        <b class=" capitalize text-xs">{{f.name}}</b>
-      </div>
+  <!--OPPORTUNITIES HIGHLIGHT-->
+  <div *ngIf="feedOpportunities.length" class="bg-white-chalk rounded-xl shadow-md p-4">
+    <div class="flex items-center justify-between mb-3">
+      <h5 class="text-sm font-semibold text-gray-900">Opportunities from organizations you follow</h5>
+      <a routerLink="/opportunities" class="text-xs font-semibold text-green hover:underline">See all</a>
     </div>
-   
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+      <app-opportunity-card *ngFor="let opportunity of feedOpportunities" [opportunity]="opportunity"></app-opportunity-card>
+    </div>
   </div>
-</div>
-<!--END RIGHT SIDE AREA-->
+  <!--END OPPORTUNITIES HIGHLIGHT-->
 
-</div></div>
+  <!--ALL POSTS-->
+  <app-post></app-post>
+  <!--END ALL POSTS-->
+
+</main>
+<!--END CENTER FEED-->
+
+
+<!--RIGHT SIDEBAR: people you may know-->
+<aside class="right-sidebar-area w-72 hidden lg:block mt-24 px-4">
+  <div class="sticky top-24 bg-white-chalk rounded-xl shadow-md p-4">
+    <h5 class="text-sm font-semibold text-gray-900 mb-3">People you may know</h5>
+
+    <div *ngIf="suggestions.length === 0" class="text-xs text-gray-500">
+      No suggestions right now.
+    </div>
+
+    <div class="flex items-center gap-3 py-2" *ngFor="let s of suggestions">
+      <a [routerLink]="['/user-profile', s.id]" class="flex items-center gap-3 flex-1 min-w-0">
+        <img [src]="s.profile" class="w-10 h-10 rounded-full object-cover flex-shrink-0" alt="">
+        <div class="flex-1 min-w-0">
+          <div class="text-sm font-medium capitalize truncate hover:underline">{{s.name}}</div>
+          <div class="text-xs text-gray-500 capitalize">{{s.role | lowercase}}</div>
+        </div>
+      </a>
+      <button
+        (click)="followSuggestion(s.id)"
+        class="text-xs font-semibold text-green border border-green rounded-full px-3 py-1 flex-shrink-0 transition-colors hover:bg-green hover:text-white">
+        Follow
+      </button>
+    </div>
+  </div>
+</aside>
+<!--END RIGHT SIDEBAR-->
+
+</div>
+</div>

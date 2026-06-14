@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../services/user.service';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { TokenStorageService } from '../services/token-storage.service';
-import { Volunteer } from '../models/volunteer';
 
 @Component({
   selector: 'app-settings',
@@ -24,24 +24,42 @@ export class SettingsComponent implements OnInit {
     "Sports and Recreation",
   ];
 
-  volunteer: Volunteer = {} as Volunteer; // Initialize an empty Volunteer object
-  constructor(private  userService: UserService, private router : Router, private tokenStorage : TokenStorageService){}
+  volunteer: any = {}; // Holds volunteer or organization profile data
+  loading = true;
+  saving = false;
+
+  constructor(
+    private userService: UserService,
+    private router: Router,
+    private tokenStorage: TokenStorageService,
+    private toastr: ToastrService
+  ) {}
 
   selectedInterests: Set<string> = new Set();
 
   ngOnInit(): void {
     this.userService.getUser().subscribe({
       next: (response: any) => {
-        const user = response?.user as Volunteer;
+        const user = response?.user;
         if (user) {
           this.volunteer = user;
-          (user.interests ?? []).forEach(interest => this.selectedInterests.add(interest));
+          (user.interests ?? []).forEach((interest: string) => this.selectedInterests.add(interest));
         }
+        this.loading = false;
       },
       error: (error) => {
         console.error('Failed to load profile:', error);
+        this.loading = false;
       }
     });
+  }
+
+  get isVolunteer(): boolean {
+    return this.volunteer.role === 'VOLUNTEER';
+  }
+
+  get isOrganization(): boolean {
+    return this.volunteer.role === 'ORGANIZATION';
   }
 
   isSelected(interest: string): boolean {
@@ -58,16 +76,35 @@ export class SettingsComponent implements OnInit {
   }
 
   onSubmit(): void {
-    this.volunteer.interests = Array.from(this.selectedInterests);
+    this.saving = true;
+
+    if (this.isOrganization) {
+      this.userService.updateOrganization(this.volunteer).subscribe({
+        next: () => this.onSaveSuccess(),
+        error: (error) => this.onSaveError(error)
+      });
+      return;
+    }
+
+    if (this.isVolunteer) {
+      this.volunteer.interests = Array.from(this.selectedInterests);
+    }
     this.userService.updateVolunteer(this.volunteer).subscribe({
-      next: (response) => {
-        console.log('Profile updated:', response);
-        this.router.navigate(['/home']);
-      },
-      error: (error) => {
-        console.error('Profile update failed:', error);
-      }
+      next: () => this.onSaveSuccess(),
+      error: (error) => this.onSaveError(error)
     });
+  }
+
+  private onSaveSuccess(): void {
+    this.saving = false;
+    this.toastr.success('Profile updated.');
+    this.router.navigate(['/user-profile']);
+  }
+
+  private onSaveError(error: any): void {
+    console.error('Profile update failed:', error);
+    this.saving = false;
+    this.toastr.error('Could not update profile.');
   }
 
 }

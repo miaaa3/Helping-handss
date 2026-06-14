@@ -1,0 +1,35 @@
+<h2 mat-dialog-title>Donation receipt</h2>
+
+<div mat-dialog-content class="receipt-content">
+  <div class="receipt-row">
+    <span class="receipt-label">Organization</span>
+    <span class="receipt-value">{{ donation.organizationName }}</span>
+  </div>
+  <div class="receipt-row">
+    <span class="receipt-label">Date</span>
+    <span class="receipt-value">{{ donation.createdAt | date:'medium' }}</span>
+  </div>
+  <div class="receipt-row">
+    <span class="receipt-label">Amount</span>
+    <span class="receipt-value">{{ donation.amount | number:'1.2-2' }} {{ donation.currency.toUpperCase() }}</span>
+  </div>
+  <div class="receipt-row">
+    <span class="receipt-label">Status</span>
+    <span class="receipt-value receipt-status" [ngClass]="'status-' + donation.status.toLowerCase()">{{ donation.status }}</span>
+  </div>
+  <div class="receipt-row" *ngIf="donation.transactionRef">
+    <span class="receipt-label">Transaction reference</span>
+    <span class="receipt-value receipt-ref">{{ donation.transactionRef }}</span>
+  </div>
+  <div class="receipt-row" *ngIf="donation.message">
+    <span class="receipt-label">Message</span>
+    <span class="receipt-value">"{{ donation.message }}"</span>
+  </div>
+
+  <p class="receipt-explanation" *ngIf="statusExplanation">{{ statusExplanation }}</p>
+</div>
+
+<div mat-dialog-actions align="end" class="receipt-actions">
+  <button mat-button (click)="close()">Close</button>
+  <button mat-raised-button color="primary" (click)="print()">Print</button>
+</div>

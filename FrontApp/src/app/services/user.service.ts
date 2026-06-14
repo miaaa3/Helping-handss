@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Volunteer } from '../models/volunteer';
+import { Organization } from '../models/organization';
 import {  Observable, Subject } from 'rxjs';
 import { User } from '../models/user';
 import { follow } from '../models/follow';
@@ -30,9 +31,22 @@ export class UserService {
     return this.http.put<User>(`${this.userUrl}/updateVolunteer`, volunteer);
   }
 
+  public updateOrganization(organization : Organization){
+    return this.http.put<User>(`${this.userUrl}/updateOrganization`, organization);
+  }
+
   searchUsers(keyword: string): Observable<SearchResult[]> {
     return this.http.get<SearchResult[]>(`${this.userUrl}/search?keyword=${keyword}`);
   }
 
+  /** "People you may know": a capped list of users not yet followed. */
+  getSuggestions(): Observable<User[]> {
+    return this.http.get<User[]>(`${this.userUrl}/suggestions`);
+  }
+
+  /** Public profile for any user (own or someone else's), including follow status and counts. */
+  getUserById(id: number): Observable<any> {
+    return this.http.get(`${this.userUrl}/${id}`);
+  }
 
 }

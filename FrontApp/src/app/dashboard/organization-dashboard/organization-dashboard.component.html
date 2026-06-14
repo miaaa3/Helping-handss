@@ -1,0 +1,118 @@
+<!-- LOADING -->
+<div *ngIf="loading" class="flex justify-center py-12">
+  <mat-spinner diameter="36"></mat-spinner>
+</div>
+
+<!-- ERROR -->
+<div *ngIf="!loading && error" class="bg-white-chalk rounded-xl shadow-md p-6 text-center text-sm text-gray-500">
+  Couldn't load your dashboard. Please try again later.
+</div>
+
+<!-- CONTENT -->
+<div *ngIf="!loading && !error && dashboard" class="flex flex-col gap-4">
+
+  <h1 class="text-lg font-semibold text-gray-900">My Dashboard</h1>
+
+  <!-- STATS -->
+  <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+    <div class="bg-white-chalk rounded-xl shadow-md p-4 text-center">
+      <div class="text-2xl font-bold text-gray-900">{{ dashboard.pendingApplicantsCount }}</div>
+      <div class="text-xs text-gray-500 mt-1">Pending applicants</div>
+    </div>
+    <div class="bg-white-chalk rounded-xl shadow-md p-4 text-center">
+      <div class="text-2xl font-bold text-gray-900">{{ dashboard.unreadMessages }}</div>
+      <div class="text-xs text-gray-500 mt-1">Unread messages</div>
+    </div>
+    <div class="bg-white-chalk rounded-xl shadow-md p-4 text-center">
+      <div class="text-2xl font-bold text-green">{{ dashboard.totalRaised | currency }}</div>
+      <div class="text-xs text-gray-500 mt-1">Total raised</div>
+    </div>
+    <div class="bg-white-chalk rounded-xl shadow-md p-4 text-center">
+      <div class="text-2xl font-bold text-gray-900">{{ dashboard.followerCount }}</div>
+      <div class="text-xs text-gray-500 mt-1">Followers &middot; {{ dashboard.postCount }} posts</div>
+    </div>
+  </div>
+  <!-- END STATS -->
+
+  <!-- OPPORTUNITIES -->
+  <div class="bg-white-chalk rounded-xl shadow-md p-4">
+    <div class="flex items-center justify-between mb-3">
+      <h2 class="text-sm font-semibold text-gray-900">My opportunities</h2>
+      <a [routerLink]="['/opportunities']" class="text-xs font-medium text-green hover:text-green-dark transition-colors">
+        Manage all
+      </a>
+    </div>
+
+    <div *ngIf="!dashboard.opportunities.length" class="text-sm text-gray-500 text-center py-4">
+      You haven't posted any opportunities yet.
+    </div>
+
+    <div *ngFor="let opportunity of dashboard.opportunities" class="border-b border-gray-100 last:border-b-0">
+      <div class="flex items-center justify-between gap-3 py-2">
+        <div class="min-w-0">
+          <div class="text-sm font-medium text-gray-900 truncate">{{ opportunity.title }}</div>
+          <div class="text-xs text-gray-500 mt-0.5">
+            {{ opportunity.location }} &middot; {{ opportunity.date | date:'MMM d, y, h:mm a' }} &middot;
+            {{ opportunity.applicantCount }} applicant{{ opportunity.applicantCount === 1 ? '' : 's' }} /
+            {{ opportunity.neededVolunteers }} needed
+          </div>
+        </div>
+        <div class="flex items-center gap-2 flex-shrink-0">
+          <span class="text-xs font-semibold px-2.5 py-1 rounded-full capitalize" [ngClass]="opportunityStatusClass(opportunity.status)">
+            {{ opportunity.status | lowercase }}
+          </span>
+          <button (click)="toggleApplicants(opportunity)"
+            class="text-xs font-medium text-gray-500 hover:text-green transition-colors">
+            {{ isExpanded(opportunity) ? 'Hide applicants' : 'View applicants' }}
+          </button>
+        </div>
+      </div>
+
+      <!-- APPLICANTS PANEL -->
+      <div *ngIf="isExpanded(opportunity)" class="pb-3 pl-2 border-l-2 border-gray-100 ml-1">
+        <div *ngIf="isLoadingApplicants(opportunity)" class="flex justify-center py-3">
+          <mat-spinner diameter="24"></mat-spinner>
+        </div>
+
+        <div *ngIf="!isLoadingApplicants(opportunity) && !getApplicants(opportunity).length" class="text-xs text-gray-500 py-2 pl-2">
+          No applicants yet.
+        </div>
+
+        <div *ngFor="let applicant of getApplicants(opportunity)"
+          class="flex items-center justify-between gap-3 py-2 pl-2">
+          <div class="min-w-0 flex items-center gap-2">
+            <img [src]="applicant.volunteerProfile || 'assets/default-profile.png'"
+              class="w-8 h-8 rounded-full object-cover flex-shrink-0" alt="">
+            <div class="min-w-0">
+              <a [routerLink]="['/user-profile', applicant.volunteerId]" class="text-sm font-medium text-gray-900 hover:text-green truncate block">
+                {{ applicant.volunteerName }}
+              </a>
+              <div class="text-xs text-gray-500">
+                Applied {{ applicant.createdAt | date:'MMM d, y' }}
+              </div>
+            </div>
+          </div>
+          <div class="flex items-center gap-2 flex-shrink-0">
+            <span *ngIf="applicant.status !== 'PENDING'"
+              class="text-xs font-semibold px-2.5 py-1 rounded-full capitalize" [ngClass]="applicationStatusClass(applicant.status)">
+              {{ applicant.status | lowercase }}
+            </span>
+            <ng-container *ngIf="applicant.status === 'PENDING'">
+              <button (click)="decide(opportunity, applicant, true)"
+                class="bg-green text-white text-xs font-semibold px-3 py-1 rounded-full shadow-sm transition-all hover:shadow-md hover:bg-green-dark active:opacity-80">
+                Accept
+              </button>
+              <button (click)="decide(opportunity, applicant, false)"
+                class="bg-white-chalk border border-gray-200 text-gray-600 text-xs font-semibold px-3 py-1 rounded-full transition-colors hover:bg-gray-100">
+                Reject
+              </button>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+      <!-- END APPLICANTS PANEL -->
+    </div>
+  </div>
+  <!-- END OPPORTUNITIES -->
+
+</div>

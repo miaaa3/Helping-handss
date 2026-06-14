@@ -16,6 +16,11 @@
       <span class="font-semibold font-rale">{{ otherUserName }}</span>
     </div>
 
+    <!-- CONNECTION STATUS -->
+    <div *ngIf="connectionState !== 'connected'" class="px-4 py-1.5 text-xs text-center bg-yellow-50 text-yellow-700 border-b border-yellow-100">
+      Reconnecting...
+    </div>
+
     <!-- MESSAGES -->
     <div #scrollContainer class="flex-1 overflow-y-auto px-4 py-3 space-y-2 bg-gray-50">
       <div *ngFor="let message of messages" class="flex" [ngClass]="isMine(message) ? 'justify-end' : 'justify-start'">

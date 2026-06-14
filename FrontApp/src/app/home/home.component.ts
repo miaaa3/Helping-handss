@@ -8,6 +8,8 @@ import { UserDataService } from '../services/user-data.service';
 import { Volunteer } from '../models/volunteer';
 import { USER_ID } from '../services/token-storage.service';
 import { FollowService } from '../services/follow.service';
+import { Opportunity } from '../models/opportunity';
+import { OpportunityService } from '../services/opportunity.service';
 
 
 @Component({
@@ -26,16 +28,21 @@ export class HomeComponent implements OnInit {
   userId!: number;
   selectedFiles: File[] = []; 
   following: User[]=[];
+  suggestions: User[]=[];
   numberOfFollowing!:number;
   numberOfFollowers!: number
+  feedOpportunities: Opportunity[] = [];
 
   ngOnInit(){
     this.getUser();
     this.getFollowing()
+    this.getSuggestions()
+    this.getFeedOpportunities()
   }
 
   constructor(private postService : PostService,private userService:UserService,
-     private router: Router, private userDataService : UserDataService, private followService: FollowService) {
+     private router: Router, private userDataService : UserDataService, private followService: FollowService,
+     private opportunityService: OpportunityService) {
     this.userId=Number(sessionStorage.getItem(USER_ID));
   }
 
@@ -108,5 +115,42 @@ export class HomeComponent implements OnInit {
       }
     );
   }
- 
-}  
+
+  getSuggestions() {
+    this.userService.getSuggestions().subscribe(
+      (suggestions) => {
+        this.suggestions = suggestions;
+      },
+      (error) => {
+        console.error('Error fetching suggestions:', error);
+      }
+    );
+  }
+
+  /** Open opportunities from organizations the user follows, for the feed highlight strip. */
+  getFeedOpportunities(): void {
+    this.opportunityService.getForFeed(this.userId).subscribe(
+      (opportunities) => {
+        this.feedOpportunities = opportunities.filter((o) => o.status === 'OPEN').slice(0, 3);
+      },
+      (error) => {
+        console.error('Error fetching feed opportunities:', error);
+      }
+    );
+  }
+
+  /** Follow a suggested user and drop them from the "People you may know" list. */
+  followSuggestion(userId: number | undefined): void {
+    if (!userId) return;
+    this.followService.follow(userId).subscribe(
+      () => {
+        this.suggestions = this.suggestions.filter((u) => u.id !== userId);
+        this.numberOfFollowing++;
+      },
+      (error) => {
+        console.error('Error following user:', error);
+      }
+    );
+  }
+
+}

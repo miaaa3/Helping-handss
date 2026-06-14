@@ -1,0 +1,25 @@
+.opportunity-form-content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 360px;
+}
+
+.opportunity-form-row {
+  display: flex;
+  gap: 12px;
+}
+
+.w-full {
+  width: 100%;
+}
+
+.flex-1 {
+  flex: 1;
+}
+
+.opportunity-form-error {
+  color: #d32f2f;
+  font-size: 13px;
+  margin: 4px 0 0;
+}

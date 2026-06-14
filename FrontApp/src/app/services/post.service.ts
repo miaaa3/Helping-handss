@@ -4,6 +4,7 @@ import { Post } from '../models/post';
 import { Observable } from 'rxjs';
 import { USER_ID } from './token-storage.service';
 import { PostDTO } from '../models/postDTO';
+import { PageResponse } from '../models/page';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -19,8 +20,14 @@ export class PostService {
   }
 
 
-  getAllPosts(): Observable<PostDTO[]> {
-    return this.http.get<PostDTO[]>(`${this.postUrl}/getAllPosts`);
+  /** Feed of posts from followed users, newest first, one page at a time. */
+  getAllPosts(page: number = 0, size: number = 10): Observable<PageResponse<PostDTO>> {
+    return this.http.get<PageResponse<PostDTO>>(`${this.postUrl}/getAllPosts?page=${page}&size=${size}`);
+  }
+
+  /** All posts by one user, newest first - for profile pages, one page at a time. */
+  getPostsByUser(userId: number, page: number = 0, size: number = 10): Observable<PageResponse<PostDTO>> {
+    return this.http.get<PageResponse<PostDTO>>(`${this.postUrl}/getPostsByUser?userId=${userId}&page=${page}&size=${size}`);
   }
 
   constructImageUrls(posts: Post[]) {

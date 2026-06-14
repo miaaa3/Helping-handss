@@ -8,7 +8,7 @@ import { HomeComponent } from '../home/home.component';
 import { Notification } from '../models/notification';
 import { Router } from '@angular/router';
 import { TokenStorageService } from '../services/token-storage.service';
-import { NotificationDTO } from '../models/notificationDTO';
+import { NotificationService } from '../services/notification.service';
 import { Subject, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 
@@ -25,7 +25,8 @@ export class MainNavbarComponent implements OnInit, OnDestroy {
   searchResults: SearchResult[] = [];
   isFollowed=false;
   followStatus: any;
-  notifications: NotificationDTO[]= [];
+  notifications: Notification[]= [];
+  unreadCount = 0;
 
   private searchTerms = new Subject<string>();
   private searchSubscription?: Subscription;
@@ -33,6 +34,7 @@ export class MainNavbarComponent implements OnInit, OnDestroy {
   constructor(
     private userService: UserService,
     private followService: FollowService,
+    private notificationService: NotificationService,
     private router: Router,
     private tokenStorage: TokenStorageService,
     private elementRef: ElementRef
@@ -112,16 +114,37 @@ export class MainNavbarComponent implements OnInit, OnDestroy {
     this.router.navigate(['login'])
   }
   getNotif(){
-    this.userService.getUser().subscribe(
-      (data: any) => {
-        this.notifications=data.notifications
-        console.log(this.notifications)
+    this.notificationService.getNotifications(0, 5).subscribe(
+      (page) => {
+        this.notifications = page.content;
       },
       (error) => {
-        console.error('Error getting notifs data:', error);
-      }, 
-      
+        console.error('Error getting notifications:', error);
+      },
+    );
+    this.refreshUnreadCount();
+  }
+
+  refreshUnreadCount(){
+    this.notificationService.getUnreadCount().subscribe(
+      (res) => this.unreadCount = res.count,
+      (error) => console.error('Error getting unread count:', error),
     );
   }
-  
+
+  /** Marks the notification read (if needed) and navigates to its target. */
+  openNotification(notification: Notification){
+    this.showDropdownNotif = false;
+    if (!notification.isRead) {
+      this.notificationService.markAsRead(notification.id).subscribe({
+        next: () => {
+          notification.isRead = true;
+          this.refreshUnreadCount();
+        },
+        error: (error) => console.error('Error marking notification as read:', error),
+      });
+    }
+    this.router.navigateByUrl(notification.link || '/notifications');
+  }
+
 }

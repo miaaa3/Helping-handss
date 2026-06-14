@@ -1,27 +1,71 @@
-# FrontApp
+# HelpingHands Angular App
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.2.0.
+Angular 16 frontend for the HelpingHands volunteering social network.
 
-## Development server
+## Summary
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+This app provides the browser experience for volunteers and organizations. Users can register, log in, browse a protected social feed, create posts with media, like and comment on posts, follow other users, update profile details, send real-time private messages, and make or review donations.
 
-## Code scaffolding
+The app uses Angular, Angular Material, Tailwind CSS, RxJS, SockJS/STOMP for chat, Stripe.js for donations, and an HTTP interceptor for JWT-authenticated backend calls.
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+## Run Locally
 
-## Build
+```bash
+npm install
+npm start
+```
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+Then open `http://localhost:4200/`.
 
-## Running unit tests
+The backend should be running at `http://localhost:8080/` unless `src/environments/environment.ts` is changed.
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+## Scripts
 
-## Running end-to-end tests
+```bash
+npm start       # Run Angular dev server
+npm run build   # Build production bundle
+npm test        # Run Karma/Jasmine tests
+```
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+## Important Folders
 
-## Further help
+```text
+src/app/services/      API services for auth, posts, users, likes, comments, follows, chat, and donations
+src/app/models/        TypeScript models used by the API layer and components
+src/app/messages/      Conversation list and chat UI
+src/app/donation/      Donate dialog and donation history UI
+src/app/post/          Feed post component
+src/app/guard/         AuthGuard for protected routes
+src/environments/      API URL configuration
+```
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+## Main Routes
+
+- `/welcome-page` public welcome page
+- `/login` login
+- `/sign-up-volunteer` volunteer registration
+- `/sign-up-organization` organization registration
+- `/home` protected feed
+- `/settings` protected profile/settings page
+- `/user-profile` protected profile page
+- `/messages` protected messaging page
+- `/my-donations` protected donation history
+
+## Configuration
+
+Edit `src/environments/environment.ts` to change the backend URL:
+
+```ts
+export const environment = {
+  apiUrl: 'http://localhost:8080/',
+  enableDebug: false
+};
+```
+
+## Notes For Development
+
+- Keep frontend DTOs in `src/app/models/` aligned with backend DTOs.
+- Protected API calls rely on the token storage service and HTTP interceptor.
+- Media files are loaded from the backend `/uploads/` route.
+- Chat connects to the backend `/ws` endpoint and sends messages to `/app/chat.send`.
+- Donation UI depends on Stripe publishable key config from `/api/donations/config`.

@@ -14,6 +14,8 @@ export class MessagesComponent implements OnInit, OnDestroy {
   selectedConversation: ConversationSummary | null = null;
 
   private messagesSubscription?: Subscription;
+  private connectionSubscription?: Subscription;
+  private wasDisconnected = false;
 
   constructor(
     private chatService: ChatService,
@@ -28,11 +30,21 @@ export class MessagesComponent implements OnInit, OnDestroy {
       this.updateConversationPreview(message);
     });
 
+    // After a dropped connection comes back, refresh the list in case previews/unread
+    // counts changed while disconnected.
+    this.connectionSubscription = this.chatService.connectionState$.subscribe((state) => {
+      if (state === 'connected' && this.wasDisconnected) {
+        this.loadConversations();
+      }
+      this.wasDisconnected = state !== 'connected';
+    });
+
     this.loadConversations(() => this.openConversationFromQueryParams());
   }
 
   ngOnDestroy(): void {
     this.messagesSubscription?.unsubscribe();
+    this.connectionSubscription?.unsubscribe();
   }
 
   selectConversation(conversation: ConversationSummary): void {

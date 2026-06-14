@@ -22,3 +22,6 @@ export interface ConversationSummary {
   lastMessageAt: string;
   unreadCount: number;
 }
+
+/** STOMP connection status, surfaced so the UI can show a "reconnecting..." indicator. */
+export type ConnectionState = 'connected' | 'connecting' | 'disconnected';

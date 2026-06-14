@@ -12,6 +12,7 @@ export interface Donation {
     donorName: string;
     organizationId: number;
     organizationName: string;
+    transactionRef?: string;
 }
 
 export interface CreateDonationRequest {

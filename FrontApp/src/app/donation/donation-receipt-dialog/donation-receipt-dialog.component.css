@@ -1,0 +1,61 @@
+.receipt-content {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 320px;
+}
+
+.receipt-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  font-size: 0.9rem;
+}
+
+.receipt-label {
+  color: #6b7280;
+}
+
+.receipt-value {
+  font-weight: 600;
+  text-align: right;
+}
+
+.receipt-ref {
+  font-family: monospace;
+  font-size: 0.8rem;
+  word-break: break-all;
+}
+
+.receipt-status {
+  text-transform: capitalize;
+}
+
+.status-succeeded {
+  color: #10b981;
+}
+
+.status-pending {
+  color: #f59e0b;
+}
+
+.status-failed {
+  color: #d32f2f;
+}
+
+.status-refunded {
+  color: #6b7280;
+}
+
+.receipt-explanation {
+  margin: 8px 0 0;
+  font-size: 0.8rem;
+  color: #6b7280;
+  line-height: 1.4;
+}
+
+@media print {
+  .receipt-actions {
+    display: none;
+  }
+}

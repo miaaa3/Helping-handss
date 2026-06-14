@@ -1,0 +1,106 @@
+<app-main-navbar></app-main-navbar>
+
+<div class="bg-gray-200 font-rale min-h-screen">
+<div class="flex max-w-7xl mx-auto">
+
+<!--LEFT SIDEBAR: nav shortcuts-->
+<aside class="left-sidebar-area w-64 hidden lg:block mt-24 px-4">
+  <div class="sticky top-24 flex flex-col gap-4">
+    <app-main-sidebar></app-main-sidebar>
+  </div>
+</aside>
+<!--END LEFT SIDEBAR-->
+
+<main class="flex-1 min-w-0 max-w-5xl mx-auto pt-24 px-4 pb-6">
+
+    <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
+      <h1 class="text-lg font-semibold text-gray-900">Volunteering Opportunities</h1>
+      <button *ngIf="isOrganization" (click)="openCreateDialog()"
+        class="bg-green text-white text-sm font-semibold px-5 py-1.5 rounded-full shadow-sm transition-all hover:shadow-md hover:bg-green-dark active:opacity-80">
+        + Post Opportunity
+      </button>
+    </div>
+
+    <!-- ORG VIEW TOGGLE -->
+    <div *ngIf="isOrganization" class="flex gap-2 mb-4">
+      <button (click)="search()"
+        class="text-sm font-semibold px-4 py-1.5 rounded-full transition-colors"
+        [ngClass]="!showMine ? 'bg-green text-white' : 'bg-white-chalk text-gray-600 hover:bg-gray-100'">
+        Browse all
+      </button>
+      <button (click)="loadMine()"
+        class="text-sm font-semibold px-4 py-1.5 rounded-full transition-colors"
+        [ngClass]="showMine ? 'bg-green text-white' : 'bg-white-chalk text-gray-600 hover:bg-gray-100'">
+        My opportunities
+      </button>
+    </div>
+    <!-- END ORG VIEW TOGGLE -->
+
+    <!-- FILTERS -->
+    <div *ngIf="!showMine" class="bg-white-chalk rounded-xl shadow-md p-4 mb-4 flex flex-wrap items-end gap-3">
+      <div class="flex flex-col gap-1">
+        <label class="text-xs font-medium text-gray-500">Category</label>
+        <select
+          class="text-sm border border-gray-200 rounded-lg px-3 py-1.5 outline-none focus:border-green/40 capitalize"
+          [(ngModel)]="filters.category" (ngModelChange)="search()">
+          <option [ngValue]="undefined">All categories</option>
+          <option *ngFor="let c of categories" [ngValue]="c" class="capitalize">{{c | lowercase}}</option>
+        </select>
+      </div>
+
+      <div class="flex flex-col gap-1">
+        <label class="text-xs font-medium text-gray-500">Status</label>
+        <select
+          class="text-sm border border-gray-200 rounded-lg px-3 py-1.5 outline-none focus:border-green/40 capitalize"
+          [(ngModel)]="filters.status" (ngModelChange)="search()">
+          <option [ngValue]="undefined">All statuses</option>
+          <option *ngFor="let s of statuses" [ngValue]="s" class="capitalize">{{s | lowercase}}</option>
+        </select>
+      </div>
+
+      <div class="flex flex-col gap-1 flex-1 min-w-[160px]">
+        <label class="text-xs font-medium text-gray-500">Location</label>
+        <input type="text" placeholder="Search by location..."
+          class="text-sm border border-gray-200 rounded-lg px-3 py-1.5 outline-none focus:border-green/40"
+          [(ngModel)]="filters.location" (keyup.enter)="search()">
+      </div>
+
+      <button (click)="search()"
+        class="bg-green text-white text-sm font-semibold px-5 py-1.5 rounded-full shadow-sm transition-all hover:shadow-md hover:bg-green-dark active:opacity-80">
+        Search
+      </button>
+      <button (click)="clearFilters()"
+        class="text-sm font-medium text-gray-500 hover:text-gray-700 px-3 py-1.5 transition-colors">
+        Clear
+      </button>
+    </div>
+    <!-- END FILTERS -->
+
+    <!-- LOADING -->
+    <div *ngIf="loading" class="flex justify-center py-12">
+      <mat-spinner diameter="36"></mat-spinner>
+    </div>
+
+    <!-- ERROR -->
+    <div *ngIf="!loading && error" class="bg-white-chalk rounded-xl shadow-md p-6 text-center text-sm text-gray-500">
+      Couldn't load opportunities. Please try again later.
+    </div>
+
+    <!-- EMPTY -->
+    <div *ngIf="!loading && !error && opportunities.length === 0" class="bg-white-chalk rounded-xl shadow-md p-6 text-center text-sm text-gray-500">
+      {{ showMine ? "You haven't posted any opportunities yet." : 'No opportunities match your filters.' }}
+    </div>
+
+    <!-- RESULTS -->
+    <div *ngIf="!loading && !error && opportunities.length" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <app-opportunity-card *ngFor="let opportunity of opportunities" [opportunity]="opportunity"
+        [canManage]="showMine" [isVolunteer]="isVolunteer" [myApplication]="applicationFor(opportunity)"
+        (edit)="editOpportunity($event)" (delete)="deleteOpportunity($event)"
+        (apply)="applyToOpportunity($event)" (withdraw)="withdrawApplication($event)"></app-opportunity-card>
+    </div>
+    <!-- END RESULTS -->
+
+</main>
+
+</div>
+</div>

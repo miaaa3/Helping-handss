@@ -10,6 +10,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSelectModule } from '@angular/material/select';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -37,6 +38,17 @@ import { MyDonationsComponent } from './donation/my-donations/my-donations.compo
 import { MessagesComponent } from './messages/messages.component';
 import { ConversationListComponent } from './messages/conversation-list/conversation-list.component';
 import { ChatWindowComponent } from './messages/chat-window/chat-window.component';
+import { OpportunitiesComponent } from './opportunities/opportunities.component';
+import { OpportunityCardComponent } from './opportunities/opportunity-card/opportunity-card.component';
+import { OpportunityFormComponent } from './opportunities/opportunity-form/opportunity-form.component';
+import { NotificationsComponent } from './notifications/notifications.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { VolunteerDashboardComponent } from './dashboard/volunteer-dashboard/volunteer-dashboard.component';
+import { OrganizationDashboardComponent } from './dashboard/organization-dashboard/organization-dashboard.component';
+import { AutoFocusDirective } from './helpers/auto-focus.directive';
+import { ConfirmDialogComponent } from './helpers/confirm-dialog/confirm-dialog.component';
+import { DonationReceiptDialogComponent } from './donation/donation-receipt-dialog/donation-receipt-dialog.component';
+import { VerifiedBadgeComponent } from './helpers/verified-badge/verified-badge.component';
 
 @NgModule({
   declarations: [
@@ -57,6 +69,17 @@ import { ChatWindowComponent } from './messages/chat-window/chat-window.componen
     MessagesComponent,
     ConversationListComponent,
     ChatWindowComponent,
+    OpportunitiesComponent,
+    OpportunityCardComponent,
+    OpportunityFormComponent,
+    NotificationsComponent,
+    DashboardComponent,
+    VolunteerDashboardComponent,
+    OrganizationDashboardComponent,
+    AutoFocusDirective,
+    ConfirmDialogComponent,
+    DonationReceiptDialogComponent,
+    VerifiedBadgeComponent,
 
   ],
   imports: [
@@ -73,6 +96,7 @@ import { ChatWindowComponent } from './messages/chat-window/chat-window.componen
     MatDialogModule,
     MatInputModule,
     MatProgressSpinnerModule,
+    MatSelectModule,
     FormsModule,
     MatFormFieldModule,
     MatIconModule,

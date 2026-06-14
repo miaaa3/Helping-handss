@@ -10,7 +10,7 @@ import {
   ViewChild
 } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { MessageResponse } from '../../models/message';
+import { ConnectionState, MessageResponse } from '../../models/message';
 import { ChatService } from '../../services/chat.service';
 import { TokenStorageService } from '../../services/token-storage.service';
 
@@ -29,9 +29,12 @@ export class ChatWindowComponent implements OnInit, OnChanges, AfterViewChecked,
   messages: MessageResponse[] = [];
   newMessage = '';
   currentUserId: number | null = null;
+  connectionState: ConnectionState = 'disconnected';
 
   private messagesSubscription?: Subscription;
+  private connectionSubscription?: Subscription;
   private shouldScrollToBottom = false;
+  private wasDisconnected = false;
 
   constructor(private chatService: ChatService, private tokenStorage: TokenStorageService) {}
 
@@ -43,9 +46,23 @@ export class ChatWindowComponent implements OnInit, OnChanges, AfterViewChecked,
 
     this.messagesSubscription = this.chatService.messages$.subscribe((message) => {
       if (this.isPartOfConversation(message)) {
-        this.messages.push(message);
-        this.shouldScrollToBottom = true;
+        this.addMessage(message);
+
+        // If the other person's message arrives while this conversation is open,
+        // tell the backend right away so unread counts stay accurate.
+        if (message.senderId === this.otherUserId) {
+          this.chatService.markAsRead(this.otherUserId).subscribe();
+        }
       }
+    });
+
+    this.connectionSubscription = this.chatService.connectionState$.subscribe((state) => {
+      // Reconnected after a drop: re-sync this conversation in case messages were missed.
+      if (state === 'connected' && this.wasDisconnected && this.otherUserId) {
+        this.loadConversation(this.otherUserId);
+      }
+      this.wasDisconnected = state !== 'connected';
+      this.connectionState = state;
     });
   }
 
@@ -64,6 +81,7 @@ export class ChatWindowComponent implements OnInit, OnChanges, AfterViewChecked,
 
   ngOnDestroy(): void {
     this.messagesSubscription?.unsubscribe();
+    this.connectionSubscription?.unsubscribe();
   }
 
   send(): void {
@@ -87,6 +105,16 @@ export class ChatWindowComponent implements OnInit, OnChanges, AfterViewChecked,
       this.messages = history;
       this.shouldScrollToBottom = true;
     });
+  }
+
+  /** Appends an incoming message, skipping it if it's already in the list (REST + STOMP overlap). */
+  private addMessage(message: MessageResponse): void {
+    if (this.messages.some((m) => m.id === message.id)) {
+      return;
+    }
+
+    this.messages.push(message);
+    this.shouldScrollToBottom = true;
   }
 
   private isPartOfConversation(message: MessageResponse): boolean {

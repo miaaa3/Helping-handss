@@ -8,10 +8,13 @@ export interface User {
     address: string;
     phone: string;
     name: string;
-    createdAt?: Date; 
+    createdAt?: Date;
     role: string;
+    bio?: string;
     posts?: Post[]; 
     numberOfFollowing:number;
-    numberOfFollowers: number
-    
+    numberOfFollowers: number;
+
+    /** Organizations only - moderation status set by admins. */
+    verificationStatus?: 'PENDING' | 'VERIFIED' | 'REJECTED';
 }

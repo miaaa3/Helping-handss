@@ -1,0 +1,94 @@
+<!-- LOADING -->
+<div *ngIf="loading" class="flex justify-center py-12">
+  <mat-spinner diameter="36"></mat-spinner>
+</div>
+
+<!-- ERROR -->
+<div *ngIf="!loading && error" class="bg-white-chalk rounded-xl shadow-md p-6 text-center text-sm text-gray-500">
+  Couldn't load your dashboard. Please try again later.
+</div>
+
+<!-- CONTENT -->
+<div *ngIf="!loading && !error && dashboard" class="flex flex-col gap-4">
+
+  <h1 class="text-lg font-semibold text-gray-900">My Dashboard</h1>
+
+  <!-- STATS -->
+  <div class="grid grid-cols-2 sm:grid-cols-5 gap-3">
+    <div class="bg-white-chalk rounded-xl shadow-md p-4 text-center">
+      <div class="text-2xl font-bold text-gray-900">{{ dashboard.pendingApplications }}</div>
+      <div class="text-xs text-gray-500 mt-1">Pending</div>
+    </div>
+    <div class="bg-white-chalk rounded-xl shadow-md p-4 text-center">
+      <div class="text-2xl font-bold text-green">{{ dashboard.acceptedApplications }}</div>
+      <div class="text-xs text-gray-500 mt-1">Accepted</div>
+    </div>
+    <div class="bg-white-chalk rounded-xl shadow-md p-4 text-center">
+      <div class="text-2xl font-bold text-red-500">{{ dashboard.rejectedApplications }}</div>
+      <div class="text-xs text-gray-500 mt-1">Rejected</div>
+    </div>
+    <div class="bg-white-chalk rounded-xl shadow-md p-4 text-center">
+      <div class="text-2xl font-bold text-gray-900">{{ dashboard.completedOpportunities }}</div>
+      <div class="text-xs text-gray-500 mt-1">Completed</div>
+    </div>
+    <div class="bg-white-chalk rounded-xl shadow-md p-4 text-center">
+      <div class="text-2xl font-bold text-gray-900">{{ dashboard.unreadMessages }}</div>
+      <div class="text-xs text-gray-500 mt-1">Unread messages</div>
+    </div>
+  </div>
+  <!-- END STATS -->
+
+  <!-- UPCOMING OPPORTUNITIES -->
+  <div class="bg-white-chalk rounded-xl shadow-md p-4">
+    <h2 class="text-sm font-semibold text-gray-900 mb-3">Upcoming opportunities</h2>
+
+    <div *ngIf="!dashboard.upcomingOpportunities.length" class="text-sm text-gray-500 text-center py-4">
+      No upcoming opportunities yet.
+    </div>
+
+    <div *ngFor="let opportunity of dashboard.upcomingOpportunities"
+      class="flex items-center justify-between gap-3 py-2 border-b border-gray-100 last:border-b-0">
+      <div class="min-w-0">
+        <a [routerLink]="['/opportunities']" class="text-sm font-medium text-gray-900 hover:text-green truncate block">
+          {{ opportunity.title }}
+        </a>
+        <div class="text-xs text-gray-500 mt-0.5">
+          {{ opportunity.organizationName }} &middot; {{ opportunity.location }} &middot; {{ opportunity.date | date:'MMM d, y, h:mm a' }}
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- END UPCOMING OPPORTUNITIES -->
+
+  <!-- APPLICATION HISTORY -->
+  <div class="bg-white-chalk rounded-xl shadow-md p-4">
+    <h2 class="text-sm font-semibold text-gray-900 mb-3">My applications</h2>
+
+    <div *ngIf="!dashboard.applications.length" class="text-sm text-gray-500 text-center py-4">
+      You haven't applied to any opportunities yet.
+    </div>
+
+    <div *ngFor="let application of dashboard.applications"
+      class="flex items-center justify-between gap-3 py-2 border-b border-gray-100 last:border-b-0">
+      <div class="min-w-0">
+        <a [routerLink]="['/opportunities']" class="text-sm font-medium text-gray-900 hover:text-green truncate block">
+          {{ application.opportunity.title }}
+        </a>
+        <div class="text-xs text-gray-500 mt-0.5">
+          {{ application.opportunity.organizationName }} &middot; {{ application.opportunity.location }} &middot; {{ application.opportunity.date | date:'MMM d, y' }}
+        </div>
+      </div>
+      <div class="flex items-center gap-2 flex-shrink-0">
+        <span class="text-xs font-semibold px-2.5 py-1 rounded-full capitalize" [ngClass]="statusClass(application.status)">
+          {{ application.status | lowercase }}
+        </span>
+        <button *ngIf="application.status === 'PENDING'" (click)="withdraw(application)"
+          class="text-xs font-medium text-gray-500 hover:text-red-500 transition-colors">
+          Withdraw
+        </button>
+      </div>
+    </div>
+  </div>
+  <!-- END APPLICATION HISTORY -->
+
+</div>

@@ -1,59 +1,54 @@
 # HelpingHands Frontend
 
-HelpingHands is a volunteering social network frontend built with Angular. It connects volunteers and organizations through user profiles, a social feed, follows, notifications, real-time messages, and donation flows.
+HelpingHands is an Angular frontend for a volunteering platform where volunteers and organizations can discover opportunities, apply, communicate, donate, and track activity from role-based dashboards.
 
-This repository contains the Angular client in `FrontApp/`.
+The Angular app lives in `FrontApp/` and talks to the Spring Boot backend in the companion `HelpingHands-backend` repository.
 
-## Project Summary
+## Current Product Shape
 
-The frontend is the user-facing part of the HelpingHands platform. It lets users register as volunteers or organizations, sign in with JWT-based authentication, browse a protected home feed, create posts with optional media uploads, interact through likes and comments, follow other users, update their profile, chat in real time, and view or create donations.
+The app is no longer just a social feed. It now has the main platform surfaces:
 
-The app talks to the Spring Boot backend at `http://localhost:8080/` by default. Protected API calls use an HTTP interceptor to attach the saved authentication token.
-
-## Main Features
-
-- Volunteer and organization registration
-- Login and token-based authenticated sessions
-- Protected routes for home, settings, profile, messages, and donation history
-- Social feed with post creation, media upload, likes, comments, and delete support
-- User search and follow/unfollow behavior
-- Notification display through the logged-in user payload
-- Volunteer profile updates through settings
-- Real-time private messaging using STOMP over SockJS/WebSocket
-- Stripe donation intent flow and "My Donations" page
-- Angular Material, Tailwind, and custom CSS styling
+- Volunteer and organization registration/login
+- Authenticated layout with navbar/sidebar navigation
+- Social feed with posts, media, likes, comments, follows, and profiles
+- Opportunity discovery and role-specific opportunity/dashboard flows
+- Applications with statuses such as pending, accepted, rejected, and cancelled
+- Organization/admin moderation and verification work in progress
+- Real-time private messaging through STOMP over SockJS/WebSocket
+- Donations, donation history, and Stripe client integration
+- Notification UI hooks for unread activity and backend notification endpoints
+- Local seeded demo data from the backend for realistic testing
 
 ## Project Structure
 
 ```text
 FrontApp/
   src/app/
+    admin-dashboard/       Admin moderation and platform management UI
     donation/              Donation dialog and donation history views
-    guard/                 Route authentication guard
-    helpers/               Auth interceptor helper code
-    home/                  Main protected feed page
+    guard/                 Auth/admin route guards
+    helpers/               HTTP auth interceptor helper code
+    home/                  Authenticated feed/dashboard surface
     login/                 Login page
-    main-navbar/           Authenticated top navigation
-    main-sidebar/          Authenticated sidebar navigation
+    main-navbar/           Top navigation
+    main-sidebar/          Sidebar navigation
     messages/              Conversation list and chat window
     models/                TypeScript interfaces and DTO models
-    organization-registration-page/
     post/                  Feed post UI and interactions
-    services/              API, auth, chat, donation, post, user services
+    services/              API, auth, chat, donation, admin, post, user services
     settings/              Profile/settings update page
     user-profile/          User profile view
-    volunteer-registration-page/
-    welcome-page/          Public landing/welcome page
+    welcome-page/          Public welcome page
   src/environments/
-    environment.ts         API base URL and frontend environment flags
+    environment.ts         Local API base URL
 ```
 
 ## Requirements
 
-- Node.js 18.13+ (Angular 16 supports Node 16.14+ / 18.10+; 18 LTS recommended)
+- Node.js 18 LTS recommended
 - npm
-- Angular CLI 16 (`npm install -g @angular/cli@16`, or use `npx ng`)
-- Running HelpingHands backend on port `8080`
+- Angular CLI 16, or run Angular commands through `npx ng`
+- HelpingHands backend running on `http://localhost:8080/`
 
 ## Setup
 
@@ -65,20 +60,6 @@ npm start
 
 Open `http://localhost:4200/`.
 
-## Default Local Ports
-
-- Frontend dev server: `4200`
-- Backend API (companion repo): `8080`
-
-## Configuration
-
-The API base URL lives in `FrontApp/src/environments/`:
-
-- `environment.ts` - used for `ng serve` / development builds. Default: `apiUrl: 'http://localhost:8080/'`
-- `environment.prod.ts` - swapped in automatically for `ng build --configuration=production` via `fileReplacements` in `angular.json`. Default: `apiUrl: '/'` (same-origin; update to your deployed backend's base URL)
-
-Change `environment.ts` when pointing local development at a different backend port, and `environment.prod.ts` before deploying.
-
 ## Useful Commands
 
 ```bash
@@ -87,43 +68,63 @@ npm run build
 npm test
 ```
 
-## Backend Connection
+## Configuration
 
-The frontend expects these backend capabilities:
+The API URL is configured in:
 
-- `POST /auth/register/volunteer`
-- `POST /auth/register/organization`
-- `POST /auth/login`
-- `GET /api/users/getUser`
-- `GET /api/users/search`
-- `PUT /api/users/updateVolunteer`
-- `GET /api/posts/getAllPosts`
-- `POST /api/posts/createPost`
-- `DELETE /api/posts/deletePost/{postId}`
-- `POST /api/likes/createLike`
-- `POST /api/comments/createComment`
-- `POST /api/follow/follow`
-- `GET /api/messages/conversations`
-- `GET /api/messages/conversation/{userId}`
-- `POST /api/donations/create-intent`
-- `GET /api/donations/my-donations`
-- `GET /api/donations/config`
-- `PUT /api/messages/conversation/{userId}/read`
-- WebSocket endpoint `/ws` with STOMP destination `/app/chat.send`
+```text
+FrontApp/src/environments/environment.ts
+```
+
+Default local API:
+
+```ts
+apiUrl: 'http://localhost:8080/'
+```
+
+Production uses `environment.prod.ts`; update it before deployment if the backend is not same-origin.
+
+## Backend Capabilities Expected
+
+The frontend expects the backend to provide:
+
+- Auth: register volunteer, register organization, login/logout
+- Users/profiles/search/follow status
+- Posts/media/likes/comments
+- Follows/unfollows
+- Opportunities and application actions
+- Role dashboards for volunteers and organizations
+- Admin actions for users, organizations, opportunities, moderation, and verification
+- Notifications with unread counts, pagination, mark-read, and mark-all-read
+- Messages via REST history plus WebSocket delivery
+- Donations via Stripe payment intents, config, history, totals, and webhook-backed statuses
+- Uploaded media from `/uploads/{fileName}`
 
 ## Current Notes
 
-- The frontend is currently organized as a classic Angular module app rather than standalone components.
+- This is a classic Angular module app, not standalone components.
+- JWT is stored client-side and attached to protected API calls through the interceptor.
 - Media URLs are built from the backend `/uploads/` static route.
-- Chat uses SockJS and STOMP with JWT passed during the STOMP connection. The client auto-reconnects
-  (`reconnectDelay: 5000`), re-syncs the open conversation and sidebar list after a reconnect, marks
-  messages as read as they're viewed, and dedupes incoming messages by id.
-- All HTTP errors are surfaced via a global interceptor (`HttpInterceptorService`) as toast
-  notifications (expired session, validation errors, payment failures, server unavailable, etc.).
-- Stripe payment confirmation depends on the backend donation and webhook configuration.
+- Chat uses SockJS/STOMP and reconnects automatically.
+- Stripe payment confirmation depends on backend Stripe keys and webhook setup.
+- The backend seeder now creates a realistic demo world, so use those seeded accounts to test full UI states.
 
-## Suggested Next Improvements
+## Best Next Work
 
-- Add stronger loading and empty states across feed, messages, and donations.
-- Expand test coverage for auth, route guards, post creation, chat, and donation flows.
-- Add a shared API contract or generated client to keep frontend and backend DTOs in sync.
+Focus on making the app feel finished and trustworthy:
+
+- Finish admin dashboard screens and connect every admin action cleanly.
+- Wire notifications fully to the backend notification API.
+- Polish small UX details: logo navigation, active nav links, comment expansion/focus, empty states, loading states, disabled saving buttons, and success/error toasts.
+- Add an opportunity details page with apply/cancel state, spots left, org info, and related opportunities.
+- Add report buttons for posts, comments, users, organizations, opportunities, and messages.
+- Improve profile trust UI with verified badges, active opportunities, impact, and donation/volunteer history.
+- Add search/filter UX for opportunities by category, city/remote, date, status, and verified organization.
+
+## Demo Login Hint
+
+The backend sample data uses `Password123!` for local demo accounts such as:
+
+- `admin@helpinghands.test`
+- `maya.volunteer@helpinghands.test`
+- `foodbridge.org@helpinghands.test`

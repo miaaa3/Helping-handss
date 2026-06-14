@@ -13,6 +13,8 @@ import { MessagesComponent } from './messages/messages.component';
 import { OpportunitiesComponent } from './opportunities/opportunities.component';
 import { NotificationsComponent } from './notifications/notifications.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.component';
+import { AdminGuard } from './guard/admin.guard';
 
 const routes: Routes = [
   {path:'sign-up-volunteer', component: RegistrationPageComponent},
@@ -29,6 +31,7 @@ const routes: Routes = [
   {path: 'opportunities', component:OpportunitiesComponent, canActivate:[AuthGuard]},
   {path: 'notifications', component:NotificationsComponent, canActivate:[AuthGuard]},
   {path: 'dashboard', component:DashboardComponent, canActivate:[AuthGuard]},
+  {path: 'admin', component:AdminDashboardComponent, canActivate:[AuthGuard, AdminGuard]},
 
 
 ];

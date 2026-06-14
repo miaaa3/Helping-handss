@@ -1,5 +1,6 @@
 import { Component, ElementRef, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { User } from '../models/user';
+import { Volunteer } from '../models/volunteer';
 import { UserService } from '../services/user.service';
 import { follow } from '../models/follow';
 import { SearchResult } from '../models/searchResult';
@@ -27,6 +28,7 @@ export class MainNavbarComponent implements OnInit, OnDestroy {
   followStatus: any;
   notifications: Notification[]= [];
   unreadCount = 0;
+  currentUser: Volunteer = {} as Volunteer;
 
   private searchTerms = new Subject<string>();
   private searchSubscription?: Subscription;
@@ -42,6 +44,7 @@ export class MainNavbarComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.getNotif();
+    this.getCurrentUser();
 
     // Debounce keystrokes so we don't hit the backend on every character typed.
     this.searchSubscription = this.searchTerms
@@ -64,6 +67,8 @@ export class MainNavbarComponent implements OnInit, OnDestroy {
   onDocumentClick(event: MouseEvent) {
     if (!this.elementRef.nativeElement.contains(event.target)) {
       this.showSearchResults = false;
+      this.showDropdown = false;
+      this.showDropdownNotif = false;
     }
   }
 
@@ -123,6 +128,18 @@ export class MainNavbarComponent implements OnInit, OnDestroy {
       },
     );
     this.refreshUnreadCount();
+  }
+
+  /** Loads the logged-in user's own profile picture for the account menu icon. */
+  getCurrentUser(){
+    this.userService.getUser().subscribe(
+      (data: any) => {
+        this.currentUser = data.user;
+      },
+      (error) => {
+        console.error('Error getting current user:', error);
+      }
+    );
   }
 
   refreshUnreadCount(){

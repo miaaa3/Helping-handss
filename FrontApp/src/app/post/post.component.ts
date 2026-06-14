@@ -93,6 +93,22 @@ export class PostComponent implements OnInit {
     });
   }
 
+  /** Prepends a freshly-created post to the top of the feed (no reload needed). */
+  prependPost(post: Post, user: User): void {
+    post.media = post.media || [];
+    post.likes = post.likes || [];
+    post.comments = post.comments || [];
+    this.postService.constructImageUrls([post]);
+
+    this.posts.unshift(post);
+    this.users.unshift(user);
+    this.isLiked.unshift(false);
+    this.likesNumber.unshift(0);
+    this.commentsNumber.unshift(0);
+    this.commentsOpen.unshift(false);
+    this.commentLoading.unshift(false);
+  }
+
   /** Loads the next page once the user nears the bottom of the page. */
   @HostListener('window:scroll')
   onWindowScroll(): void {

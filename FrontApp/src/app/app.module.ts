@@ -46,9 +46,16 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { VolunteerDashboardComponent } from './dashboard/volunteer-dashboard/volunteer-dashboard.component';
 import { OrganizationDashboardComponent } from './dashboard/organization-dashboard/organization-dashboard.component';
 import { AutoFocusDirective } from './helpers/auto-focus.directive';
+import { TimeAgoPipe } from './helpers/time-ago.pipe';
 import { ConfirmDialogComponent } from './helpers/confirm-dialog/confirm-dialog.component';
 import { DonationReceiptDialogComponent } from './donation/donation-receipt-dialog/donation-receipt-dialog.component';
 import { VerifiedBadgeComponent } from './helpers/verified-badge/verified-badge.component';
+import { AvatarComponent } from './helpers/avatar/avatar.component';
+import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.component';
+import { AdminOrganizationsComponent } from './admin-dashboard/admin-organizations/admin-organizations.component';
+import { AdminUsersComponent } from './admin-dashboard/admin-users/admin-users.component';
+import { AdminContentComponent } from './admin-dashboard/admin-content/admin-content.component';
+import { AdminDonationsComponent } from './admin-dashboard/admin-donations/admin-donations.component';
 
 @NgModule({
   declarations: [
@@ -77,9 +84,16 @@ import { VerifiedBadgeComponent } from './helpers/verified-badge/verified-badge.
     VolunteerDashboardComponent,
     OrganizationDashboardComponent,
     AutoFocusDirective,
+    TimeAgoPipe,
     ConfirmDialogComponent,
     DonationReceiptDialogComponent,
     VerifiedBadgeComponent,
+    AvatarComponent,
+    AdminDashboardComponent,
+    AdminOrganizationsComponent,
+    AdminUsersComponent,
+    AdminContentComponent,
+    AdminDonationsComponent,
 
   ],
   imports: [

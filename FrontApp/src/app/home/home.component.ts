@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Post } from '../models/post';
 import { PostService } from '../services/post.service';
 import { Router } from '@angular/router';
@@ -10,6 +10,7 @@ import { USER_ID } from '../services/token-storage.service';
 import { FollowService } from '../services/follow.service';
 import { Opportunity } from '../models/opportunity';
 import { OpportunityService } from '../services/opportunity.service';
+import { PostComponent } from '../post/post.component';
 
 
 @Component({
@@ -20,13 +21,17 @@ import { OpportunityService } from '../services/opportunity.service';
 
 export class HomeComponent implements OnInit {
 
+  @ViewChild(PostComponent) postComponent!: PostComponent;
+
   selectedFile: File | undefined;
-  post: Post = {} as Post; 
+  post: Post = {} as Post;
   user: Volunteer = {} as Volunteer;
   isToastVisible=false;
   email?: string;
   userId!: number;
-  selectedFiles: File[] = []; 
+  selectedFiles: File[] = [];
+  filePreviews: string[] = [];
+  composerExpanded = false;
   following: User[]=[];
   suggestions: User[]=[];
   numberOfFollowing!:number;
@@ -50,9 +55,29 @@ export class HomeComponent implements OnInit {
     const inputElement = event.target as HTMLInputElement;
     if (inputElement.files) {
       for (let i = 0; i < inputElement.files.length; i++) {
-        this.selectedFiles.push(inputElement.files[i]); // Add each selected file to the array
+        const file = inputElement.files[i];
+        this.selectedFiles.push(file);
+        this.filePreviews.push(URL.createObjectURL(file));
       }
     }
+    this.composerExpanded = true;
+    inputElement.value = '';
+  }
+
+  /** Removes a pending attachment (and its preview) before posting. */
+  removeSelectedFile(index: number): void {
+    URL.revokeObjectURL(this.filePreviews[index]);
+    this.selectedFiles.splice(index, 1);
+    this.filePreviews.splice(index, 1);
+  }
+
+  /** Collapses the composer and discards any unposted content/attachments. */
+  cancelComposer(): void {
+    this.post.content = '';
+    this.filePreviews.forEach((url) => URL.revokeObjectURL(url));
+    this.selectedFiles = [];
+    this.filePreviews = [];
+    this.composerExpanded = false;
   }
 
   getUser(){
@@ -80,24 +105,13 @@ export class HomeComponent implements OnInit {
       return;
     }
 
-    const formData = new FormData();
-    formData.append('content', this.post.content!);
-
-    // Check if file are selected
-    if (this.selectedFiles.length > 0) {
-      for (let i = 0; i < this.selectedFiles.length; i++) {
-        formData.append('files', this.selectedFiles[i]);
-      }
-    }
-    
-
     this.postService.createPost(this.post.content!, this.selectedFiles).subscribe(
-      (response: any) => {
+      (response: Post) => {
         if (response) {
-          console.log('Post created successfully:', response);
-          // Clear the form 
-          this.post.content = '';
-          this.selectedFiles = [];
+          // Show the new post at the top of the feed immediately.
+          this.postComponent?.prependPost(response, this.user);
+          // Clear/collapse the composer
+          this.cancelComposer();
         }
       },
       (error: any) => {

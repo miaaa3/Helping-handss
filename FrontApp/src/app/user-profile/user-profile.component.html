@@ -32,7 +32,7 @@
       <div class="h-24 bg-gradient-to-r from-green to-green-dark"></div>
       <div class="px-6 pb-4 -mt-10 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
         <div class="flex items-end gap-4">
-          <img class="w-20 h-20 rounded-full border-4 border-white-chalk object-cover flex-shrink-0" [src]="user.profile" alt="">
+          <app-avatar [src]="user.profile" [name]="user.name" sizeClass="w-20 h-20 rounded-full border-4 border-white-chalk object-cover flex-shrink-0"></app-avatar>
           <div class="pb-1">
             <h1 class="text-lg font-semibold capitalize flex items-center gap-1.5">
               {{user.name}}
@@ -144,7 +144,7 @@
     <div *ngFor="let post of posts; let i = index" class="bg-white-chalk rounded-2xl shadow-sm hover:shadow-md transition-shadow p-4">
       <div class="flex items-center justify-between">
         <div class="flex items-center gap-3.5 min-w-0">
-          <img [src]="postUsers[i].profile" class="object-cover rounded-full w-11 h-11 flex-shrink-0" alt="">
+          <app-avatar [src]="postUsers[i].profile" [name]="postUsers[i].name" sizeClass="w-11 h-11 rounded-full object-cover flex-shrink-0"></app-avatar>
           <div class="flex flex-col min-w-0">
             <b class="mb-0.5 capitalize truncate">{{postUsers[i].name}}</b>
             <time class="text-gray-400 text-xs">{{ post.createdAt | date:'medium' }}</time>

@@ -1,38 +1,35 @@
-
-
-
 <!-- NAVBAR -->
-<nav class=" fixed flex dark:bg-slate-900 items-center justify-between bg-white-chalk px-3 py-4 w-full z-10 bg-white bg-clip-border text-gray-800 shadow-md gap-2">
-  <div class="flex-shrink-0">
-    <a routerLink="/home" title="Home">
-      <img src="assets/images/n.png" class="h-8 sm:h-10 w-auto max-w-[140px] sm:max-w-[192px] ml-0 cursor-pointer" alt="Helping Hands Logo" />
-    </a>
-</div>
+<nav class="fixed top-0 inset-x-0 flex items-center gap-2 sm:gap-4 dark:bg-slate-900 bg-white-chalk/95 backdrop-blur-md border-b border-gray-200/70 px-3 sm:px-6 py-2.5 w-full z-20 text-gray-800 shadow-sm">
 
-   <!-- SEARCH BAR -->
-   <div class="content-center justify-evenly flex flex-1 min-w-0 sm:mr-8 md:mr-20 lg:mr-40">
-    <label class="block text-sm w-full max-w-[400px] relative">
+  <!-- LOGO -->
+  <div class="flex-shrink-0">
+    <a routerLink="/home" title="Home" class="inline-block transition-transform hover:scale-105">
+      <img src="assets/images/n.png" class="h-8 sm:h-10 w-auto max-w-[140px] sm:max-w-[192px] cursor-pointer" alt="Helping Hands Logo" />
+    </a>
+  </div>
+
+  <!-- SEARCH BAR -->
+  <div class="flex-1 min-w-0 max-w-md relative">
+    <label class="block text-sm w-full relative">
       <div class="relative text-gray-500">
-        <input class="block w-full h-8 rounded-lg mr-2 mt-1 text-sm text-gray-900 border-gray-500 bg-whitesmoke-default pl-2"
-          placeholder="Search..."  [(ngModel)]="searchKeyword" (input)="onSearchInput()" (focus)="onSearchInput()"/>
-        <img class="absolute inset-y-0 right-2  w-5 mt-1" src="assets/images/icon-search.png">
+        <input
+          class="block w-full h-9 rounded-full pl-4 pr-9 text-sm text-gray-900 bg-whitesmoke-default border border-transparent outline-none transition-all focus:bg-white focus:border-green-light/40 focus:ring-2 focus:ring-green-light/20"
+          placeholder="Search people..." [(ngModel)]="searchKeyword" (input)="onSearchInput()" (focus)="onSearchInput()"/>
+        <img class="absolute right-3 top-1/2 -translate-y-1/2 w-4 opacity-60" src="assets/images/icon-search.png">
       </div>
     </label>
-    <div *ngIf="showSearchResults" class="mt-9 absolute overflow-hidden bg-white-chalk rounded-md d rounded-t-none w-[calc(100vw-2rem)] max-w-[400px] shadow-lg z-20">
+    <div *ngIf="showSearchResults" class="animate-slide-down mt-2 absolute overflow-hidden bg-white-chalk rounded-xl w-full max-w-[400px] shadow-lg z-20 border border-gray-100">
       <ul *ngIf="searchResults.length > 0">
-        <li *ngFor="let user of searchResults ; let i = index" class="flex items-center px-3 py-1  hover:bg-gray-100 ">
+        <li *ngFor="let user of searchResults ; let i = index" class="flex items-center px-3 py-2 hover:bg-gray-100 transition-colors">
           <a [routerLink]="['/user-profile', user.user.id]" (click)="showSearchResults = false" class="flex items-center flex-1 min-w-0 mr-2">
-            <img
-              class="w-8 h-8 rounded-full mr-2 border-2 border-white object-cover"
-              [src]="user.user.profile || 'assets/images/default-avatar.png'"
-              alt=""
-            />
+            <app-avatar [src]="user.user.profile" [name]="user.user.name"
+              sizeClass="w-8 h-8 rounded-full mr-2 border-2 border-white object-cover flex-shrink-0"></app-avatar>
             <div class="text-sm font-rale truncate hover:underline">{{ user.user.name }}</div>
           </a>
           <div class="flex content-center justify-between items-center">
             <div class="pt-0 flex justify-end items-center gap-1.5 flex-shrink-0">
               <button
-                class="select-none w-7 h-6 flex items-center justify-center rounded-lg bg-gray-200 hover:bg-gray-300 transition-all"
+                class="select-none w-7 h-6 flex items-center justify-center rounded-lg bg-gray-200 hover:bg-gray-300 transition-colors"
                 type="button"
                 title="Message"
                 (click)="messageUser(user.user)"
@@ -64,125 +61,132 @@
       </div>
     </div>
   </div>
+  <!--END SEARCH BAR-->
 
-    <!--END SEARCH BAR-->
+  <!-- ICONS -->
+  <div class="flex items-center gap-1 sm:gap-2 ml-auto flex-shrink-0">
 
-    <div class="flex justify-center items-center gap-2 ">
-      <!--ICONS-->
-        <!--MESSAGES-->
-        <div routerLink="/messages" class="w-7 hover:ring-4 cursor-pointer relative ring-blue-700/30 rounded-full" title="Messages">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.86 9.86 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-          </svg>
+    <!-- MESSAGES -->
+    <a routerLink="/messages" title="Messages"
+       class="w-9 h-9 flex items-center justify-center rounded-full text-gray-600 hover:text-green hover:bg-green-light/10 transition-colors">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.86 9.86 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+      </svg>
+    </a>
+    <!-- END MESSAGES -->
+
+    <!-- NOTIFICATIONS -->
+    <div class="relative">
+      <button type="button" (click)="toggleDropdownNotif()" title="Notifications"
+        class="relative w-9 h-9 flex items-center justify-center rounded-full text-gray-600 hover:text-green hover:bg-green-light/10 transition-colors">
+        <img src="/assets/images/icon-notifications.png" class="w-5 h-5" alt="">
+        <span *ngIf="unreadCount > 0" class="animate-fade-in absolute top-0.5 right-0.5 min-w-[16px] h-4 px-1 rounded-full bg-red-600 text-white text-[10px] font-bold flex items-center justify-center">
+          {{ unreadCount > 9 ? '9+' : unreadCount }}
+        </span>
+      </button>
+      <div class="dropdown-panel origin-top-right absolute top-12 right-0 w-64 sm:w-72 overflow-hidden bg-white rounded-xl shadow-lg border border-gray-100"
+           [class.dropdown-open]="showDropdownNotif">
+        <div class="py-2">
+          <p *ngIf="notifications.length === 0" class="px-4 py-3 text-sm text-gray-500">You're all caught up.</p>
+          <a *ngFor="let notification of notifications" (click)="openNotification(notification)"
+             class="flex items-center px-4 py-3 border-b last:border-b-0 border-gray-100 hover:bg-gray-100 transition-colors cursor-pointer"
+             [ngClass]="notification.isRead ? '' : 'bg-green/5'">
+              <app-avatar [src]="notification.actorProfile" [name]="notification.actorName" sizeClass="w-8 h-8 rounded-full object-cover mr-2 flex-shrink-0"></app-avatar>
+              <p class="text-gray-600 text-sm">
+                  <span class="font-bold">{{notification.actorName}}</span> {{notification.message}}
+              </p>
+              <span *ngIf="!notification.isRead" class="ml-auto h-2 w-2 rounded-full bg-green flex-shrink-0"></span>
+          </a>
         </div>
-        <!--END MESSAGES-->
-        <div (click)="toggleDropdownNotif()"  class="w-7 hover:ring-4  cursor-pointer relative ring-blue-700/30 rounded-full ">
-          <img src="/assets/images/icon-notifications.png" alt="">
-          <span *ngIf="unreadCount > 0" class="absolute -top-1 -right-1 min-w-[16px] h-4 px-1 rounded-full bg-red-600 text-white text-[10px] font-bold flex items-center justify-center">
-            {{ unreadCount > 9 ? '9+' : unreadCount }}
-          </span>
-          <div [ngClass]="showDropdownNotif ? 'block' : 'hidden'" class="drop-down  w-64 overflow-hidden bg-white rounded-md shadow absolute top-12 right-3">
-            <div class="py-2"  >
-              <p *ngIf="notifications.length === 0" class="px-4 py-3 text-sm text-gray-500">You're all caught up.</p>
-              <a *ngFor="let notification of notifications" (click)="openNotification(notification)"
-                 class="flex items-center px-4 py-3 border-b hover:bg-gray-100 -mx-2 cursor-pointer"
-                 [ngClass]="notification.isRead ? '' : 'bg-green/5'">
-                  <img class="h-8 w-8 rounded-full object-cover mx-1" [src]="notification.actorProfile || 'assets/images/default-avatar.png'" alt="avatar">
-                  <p class="text-gray-600 text-sm mx-2">
-                      <span class="font-bold">{{notification.actorName}}</span> {{notification.message}}
-                  </p>
-                  <span *ngIf="!notification.isRead" class="ml-auto h-2 w-2 rounded-full bg-green flex-shrink-0"></span>
-              </a>
-            </div>
-            <a routerLink="/notifications" (click)="showDropdownNotif = false" class="block bg-green text-white text-center font-bold py-2">See all notifications</a>
-        </div>
+        <a routerLink="/notifications" (click)="showDropdownNotif = false" class="block bg-green hover:bg-green-dark text-white text-center font-bold py-2 transition-colors">See all notifications</a>
       </div>
-    
+    </div>
+    <!-- END NOTIFICATIONS -->
+
+    <!-- ACCOUNT DROPDOWN -->
+    <div class="relative">
+      <button type="button" (click)="toggleDropdown()" title="Account"
+        class="w-9 h-9 rounded-full overflow-hidden ring-2 ring-transparent hover:ring-green-light/40 transition-all">
+        <app-avatar [src]="currentUser.profile" [name]="currentUser.name" sizeClass="w-9 h-9 rounded-full object-cover flex-shrink-0"></app-avatar>
+      </button>
+      <div class="dropdown-panel origin-top-right absolute top-12 right-0 w-48 overflow-hidden bg-white rounded-xl shadow-lg border border-gray-100"
+           [class.dropdown-open]="showDropdown">
+        <ul class="py-1">
+          <li class="text-sm font-medium">
+            <a routerLink="/settings" (click)="showDropdown = false" class="px-3 py-2.5 flex items-center gap-2 w-full hover:bg-gray-100 transition-colors">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+              <span>Settings</span>
+            </a>
+          </li>
+          <li class="text-sm font-medium">
+            <a routerLink="/user-profile" (click)="showDropdown = false" class="px-3 py-2.5 flex items-center gap-2 w-full hover:bg-gray-100 transition-colors">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+              </svg>
+              <span>Profile</span>
+            </a>
+          </li>
+          <li class="text-sm font-medium border-t border-gray-100">
+            <button (click)="logout()" class="px-3 py-2.5 flex items-center gap-2 w-full text-left hover:bg-red-100 hover:text-red-600 transition-colors">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+              </svg>
+              <span>Logout</span>
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <!-- END ACCOUNT DROPDOWN -->
+
+  </div>
   <!--END ICONS-->
 
-    
-    <!--DROPDOWN-->
-      <div (click)="toggleDropdown()" class="h-10 w-10 hover:ring-4  cursor-pointer relative ring-blue-700/30 rounded-full bg-cover bg-center bg-[url('https://avatars.githubusercontent.com/u/67946056?v=4')]">
-         <div [ngClass]="showDropdown ? 'block' : 'hidden'" class="drop-down  w-48 overflow-hidden bg-white rounded-md shadow absolute top-12 right-3">
-          <ul>
-            <li class="text-sm font-medium hover:bg-gray-100">
-              <a routerLink="/settings" (click)="showDropdown = false" class="px-3 py-3 flex items-center space-x-2 w-full">
-                <span>
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                  </svg>
-                </span>
-                <span> Setting </span>
-              </a>
-            </li>
-            <li class="text-sm font-medium hover:bg-slate-100">
-              <a routerLink="/user-profile" (click)="showDropdown = false" class="px-3 py-3 flex items-center space-x-2 w-full">
-                <span>
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                  </svg>
-                </span>
-                <span> Profile </span>
-              </a>
-            </li>
-            <li class="px-3  py-3 text-sm font-medium flex items-center space-x-2 hover:bg-slate-400">
-              <span>
-           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-            </svg>
-              </span>
-              <button (click)="logout()"> Logout </button>
-            </li>
-          </ul>
-        </div>
-      </div>
-      <!--END DROPDOWN-->
-    </div>  
-
-    </nav>
-
-    <!--END NAVBAR-->
+</nav>
+<!--END NAVBAR-->
 
 <!-- MOBILE BOTTOM NAV: shown below the lg breakpoint, where the sidebars are hidden -->
 <nav class="lg:hidden fixed bottom-0 inset-x-0 z-10 bg-white-chalk border-t border-gray-200 shadow-md flex items-center justify-around py-2">
   <a routerLink="/home" routerLinkActive="text-green" [routerLinkActiveOptions]="{exact: true}"
-     class="flex flex-col items-center gap-0.5 text-gray-500 px-2 py-1">
+     class="flex flex-col items-center gap-0.5 text-gray-500 px-2 py-1 transition-colors">
     <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
       <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l9-9 9 9M5 10v10a1 1 0 001 1h3a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1h3a1 1 0 001-1V10"/>
     </svg>
     <span class="text-[10px] font-medium">Home</span>
   </a>
   <a routerLink="/opportunities" routerLinkActive="text-green"
-     class="flex flex-col items-center gap-0.5 text-gray-500 px-2 py-1">
+     class="flex flex-col items-center gap-0.5 text-gray-500 px-2 py-1 transition-colors">
     <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
       <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
     </svg>
     <span class="text-[10px] font-medium">Opportunities</span>
   </a>
   <a routerLink="/dashboard" routerLinkActive="text-green"
-     class="flex flex-col items-center gap-0.5 text-gray-500 px-2 py-1">
+     class="flex flex-col items-center gap-0.5 text-gray-500 px-2 py-1 transition-colors">
     <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
       <path stroke-linecap="round" stroke-linejoin="round" d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/>
     </svg>
     <span class="text-[10px] font-medium">Dashboard</span>
   </a>
   <a routerLink="/messages" routerLinkActive="text-green"
-     class="flex flex-col items-center gap-0.5 text-gray-500 px-2 py-1">
+     class="flex flex-col items-center gap-0.5 text-gray-500 px-2 py-1 transition-colors">
     <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
       <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
     </svg>
     <span class="text-[10px] font-medium">Messages</span>
   </a>
   <a routerLink="/notifications" routerLinkActive="text-green"
-     class="flex flex-col items-center gap-0.5 text-gray-500 px-2 py-1">
+     class="flex flex-col items-center gap-0.5 text-gray-500 px-2 py-1 transition-colors">
     <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
       <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
     </svg>
     <span class="text-[10px] font-medium">Alerts</span>
   </a>
   <a routerLink="/user-profile" routerLinkActive="text-green" [routerLinkActiveOptions]="{exact: true}"
-     class="flex flex-col items-center gap-0.5 text-gray-500 px-2 py-1">
+     class="flex flex-col items-center gap-0.5 text-gray-500 px-2 py-1 transition-colors">
     <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
       <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
     </svg>

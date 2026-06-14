@@ -1,9 +1,9 @@
-<div class="bg-white-chalk rounded-xl shadow-md p-4 flex flex-col gap-3">
+<div class="animate-fade-in bg-white-chalk rounded-xl shadow-md p-4 flex flex-col gap-3 transition-shadow hover:shadow-lg">
 
   <!-- ORG + STATUS -->
   <div class="flex items-center gap-3">
     <a [routerLink]="['/user-profile', opportunity.organizationId]" class="flex items-center gap-3 min-w-0 flex-1">
-      <img [src]="opportunity.organizationProfile" class="w-10 h-10 rounded-full object-cover flex-shrink-0" alt="">
+      <app-avatar [src]="opportunity.organizationProfile" [name]="opportunity.organizationName" sizeClass="w-10 h-10 rounded-full object-cover flex-shrink-0"></app-avatar>
       <div class="min-w-0">
         <div class="text-sm font-semibold capitalize truncate hover:underline">{{opportunity.organizationName}}</div>
         <div class="text-xs text-gray-500">{{opportunity.date | date:'MMM d, y · h:mm a'}}</div>

@@ -81,8 +81,8 @@
         <div *ngFor="let applicant of getApplicants(opportunity)"
           class="flex items-center justify-between gap-3 py-2 pl-2">
           <div class="min-w-0 flex items-center gap-2">
-            <img [src]="applicant.volunteerProfile || 'assets/default-profile.png'"
-              class="w-8 h-8 rounded-full object-cover flex-shrink-0" alt="">
+            <app-avatar [src]="applicant.volunteerProfile" [name]="applicant.volunteerName"
+              sizeClass="w-8 h-8 rounded-full object-cover flex-shrink-0"></app-avatar>
             <div class="min-w-0">
               <a [routerLink]="['/user-profile', applicant.volunteerId]" class="text-sm font-medium text-gray-900 hover:text-green truncate block">
                 {{ applicant.volunteerName }}

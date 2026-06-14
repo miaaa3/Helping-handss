@@ -13,11 +13,8 @@
     class="flex items-center gap-3 px-4 py-3 cursor-pointer border-b border-gray-100 hover:bg-gray-100 transition-colors"
     [ngClass]="{ 'bg-green-light/10': conversation.otherUserId === selectedUserId }"
   >
-    <img
-      [src]="conversation.otherUserProfile || 'assets/images/default-avatar.png'"
-      class="w-12 h-12 rounded-full object-cover border border-gray-200"
-      alt=""
-    />
+    <app-avatar [src]="conversation.otherUserProfile" [name]="conversation.otherUserName"
+      sizeClass="w-12 h-12 rounded-full object-cover border border-gray-200 flex-shrink-0"></app-avatar>
 
     <div class="flex-1 min-w-0">
       <div class="flex items-center justify-between">

@@ -17,4 +17,7 @@ export interface User {
 
     /** Organizations only - moderation status set by admins. */
     verificationStatus?: 'PENDING' | 'VERIFIED' | 'REJECTED';
+
+    /** Account moderation flag - disabled accounts can't authenticate. Managed by admins. */
+    enabled?: boolean;
 }

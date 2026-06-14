@@ -41,7 +41,7 @@ export class PostService {
   }
   
 
-  createPost(content: string, files: File[] | null = null): Observable<any> {
+  createPost(content: string, files: File[] | null = null): Observable<Post> {
     const formData: FormData = new FormData();
     formData.append('content', content);
     if (files) {
@@ -50,7 +50,7 @@ export class PostService {
       }
     }
 
-    return this.http.post(`${this.postUrl}/createPost`, formData);
+    return this.http.post<Post>(`${this.postUrl}/createPost`, formData);
   }
 
   deletePost(postId:number){

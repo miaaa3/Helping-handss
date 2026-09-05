@@ -29,6 +29,7 @@ export class MainNavbarComponent implements OnInit, OnDestroy {
   notifications: Notification[]= [];
   unreadCount = 0;
   currentUser: Volunteer = {} as Volunteer;
+  highlightedIndex = -1;
 
   private searchTerms = new Subject<string>();
   private searchSubscription?: Subscription;
@@ -83,6 +84,7 @@ export class MainNavbarComponent implements OnInit, OnDestroy {
   onSearchInput() {
     const keyword = this.searchKeyword.trim();
     this.showSearchResults = keyword.length > 0;
+    this.highlightedIndex = -1;
 
     if (keyword.length === 0) {
       this.searchResults = [];
@@ -90,6 +92,39 @@ export class MainNavbarComponent implements OnInit, OnDestroy {
     }
 
     this.searchTerms.next(keyword);
+  }
+
+  onSearchKeydown(event: KeyboardEvent): void {
+    if (!this.showSearchResults || this.searchResults.length === 0) return;
+
+    if (event.key === 'ArrowDown') {
+      event.preventDefault();
+      this.highlightedIndex = Math.min(this.highlightedIndex + 1, this.searchResults.length - 1);
+    } else if (event.key === 'ArrowUp') {
+      event.preventDefault();
+      this.highlightedIndex = Math.max(this.highlightedIndex - 1, 0);
+    } else if (event.key === 'Enter' && this.highlightedIndex >= 0) {
+      event.preventDefault();
+      const user = this.searchResults[this.highlightedIndex].user;
+      this.showSearchResults = false;
+      this.searchKeyword = '';
+      this.router.navigate(['/user-profile', user.id]);
+    } else if (event.key === 'Escape') {
+      this.showSearchResults = false;
+      this.highlightedIndex = -1;
+    }
+  }
+
+  roleBadgeClass(role: string): string {
+    if (role === 'ORGANIZATION') return 'bg-blue-100 text-blue-700';
+    if (role === 'VOLUNTEER') return 'bg-green-100 text-green-700';
+    return 'bg-gray-100 text-gray-600';
+  }
+
+  roleLabel(role: string): string {
+    if (role === 'ORGANIZATION') return 'Org';
+    if (role === 'VOLUNTEER') return 'Vol';
+    return role;
   }
 
   /** Jumps straight to a chat with this user from the search dropdown. */
@@ -100,18 +135,31 @@ export class MainNavbarComponent implements OnInit, OnDestroy {
     });
   }
 
-  follow(userId:number){
-    this.followService.follow(userId).subscribe(
-      (response )=>{
-        const userIndex = this.searchResults.findIndex((user) => user.user.id === userId);
-        if (userIndex !== -1) {
-          this.searchResults[userIndex].followed = response.followed;
+  follow(userId: number): void {
+    this.followService.follow(userId).subscribe({
+      next: (response) => {
+        const idx = this.searchResults.findIndex((r) => r.user.id === userId);
+        if (idx !== -1) {
+          this.searchResults[idx].followed = response.followed;
+          (this.searchResults[idx] as any).followStatus = response.status;
         }
       },
-      ()=>{
-        this.onSearchInput()
-      }
-    )
+      error: () => this.onSearchInput()
+    });
+  }
+
+  followLabel(result: SearchResult): string {
+    const status = (result as any).followStatus;
+    if (status === 'PENDING') return 'Pending';
+    if (result.followed) return 'Following';
+    return 'Follow';
+  }
+
+  followBtnClass(result: SearchResult): string {
+    const status = (result as any).followStatus;
+    if (status === 'PENDING') return 'bg-yellow-400 text-white';
+    if (result.followed) return 'bg-gray-200 text-gray-700 hover:bg-red-100 hover:text-red-600';
+    return 'bg-green text-white hover:bg-green-dark';
   }
 
   logout(){

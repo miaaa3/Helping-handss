@@ -30,6 +30,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
   numberOfFollowing = 0;
   isFollowing = false;
   isOwnProfile = true;
+  followStatus: 'NONE' | 'PENDING' | 'ACCEPTED' = 'NONE';
 
   loading = true;
   error = false;
@@ -94,6 +95,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
         this.numberOfFollowing = data.numberOfFollowing;
         this.isOwnProfile = isOwn ? true : !!data.ownProfile;
         this.isFollowing = isOwn ? false : !!data.following;
+        this.followStatus = isOwn ? 'NONE' : (data.followStatus || 'NONE') as any;
         this.loading = false;
 
         if (this.isOrganization && this.user.id) {
@@ -158,15 +160,24 @@ export class UserProfileComponent implements OnInit, OnDestroy {
     }
   }
 
-  /** Toggles following this profile and updates counts in place - no reload needed. */
+  /** Toggles follow/pending/unfollow and updates state in place. */
   toggleFollow(): void {
     if (!this.user.id || this.followBusy) return;
 
     this.followBusy = true;
     this.followService.follow(this.user.id).subscribe({
       next: (response) => {
-        this.isFollowing = response.followed;
-        this.numberOfFollowers += this.isFollowing ? 1 : -1;
+        const wasFollowing = this.followStatus === 'ACCEPTED';
+        if (response.status === 'PENDING') {
+          this.followStatus = 'PENDING';
+          this.isFollowing = false;
+          this.toastr.info('Follow request sent!');
+        } else {
+          // cancelled request or unfollowed
+          this.followStatus = 'NONE';
+          this.isFollowing = false;
+          if (wasFollowing) this.numberOfFollowers--;
+        }
         this.followBusy = false;
       },
       error: (err) => {
@@ -175,6 +186,18 @@ export class UserProfileComponent implements OnInit, OnDestroy {
         this.followBusy = false;
       }
     });
+  }
+
+  get followButtonLabel(): string {
+    if (this.followStatus === 'ACCEPTED') return 'Following';
+    if (this.followStatus === 'PENDING') return 'Pending';
+    return 'Follow';
+  }
+
+  get followButtonClass(): string {
+    if (this.followStatus === 'ACCEPTED') return 'bg-gray-100 text-gray-700 hover:bg-gray-200';
+    if (this.followStatus === 'PENDING') return 'bg-yellow-100 text-yellow-700 hover:bg-yellow-200';
+    return 'bg-green text-white hover:bg-green-dark';
   }
 
   messageUser(): void {

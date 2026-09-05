@@ -10,56 +10,86 @@
 
   <!-- SEARCH BAR -->
   <div class="flex-1 min-w-0 max-w-md relative">
-    <label class="block text-sm w-full relative">
-      <div class="relative text-gray-500">
-        <input
-          class="block w-full h-9 rounded-full pl-4 pr-9 text-sm text-gray-900 bg-whitesmoke-default border border-transparent outline-none transition-all focus:bg-white focus:border-green-light/40 focus:ring-2 focus:ring-green-light/20"
-          placeholder="Search people..." [(ngModel)]="searchKeyword" (input)="onSearchInput()" (focus)="onSearchInput()"/>
-        <img class="absolute right-3 top-1/2 -translate-y-1/2 w-4 opacity-60" src="assets/images/icon-search.png">
-      </div>
-    </label>
-    <div *ngIf="showSearchResults" class="animate-slide-down mt-2 absolute overflow-hidden bg-white-chalk rounded-xl w-full max-w-[400px] shadow-lg z-20 border border-gray-100">
-      <ul *ngIf="searchResults.length > 0">
-        <li *ngFor="let user of searchResults ; let i = index" class="flex items-center px-3 py-2 hover:bg-gray-100 transition-colors">
-          <a [routerLink]="['/user-profile', user.user.id]" (click)="showSearchResults = false" class="flex items-center flex-1 min-w-0 mr-2">
-            <app-avatar [src]="user.user.profile" [name]="user.user.name"
-              sizeClass="w-8 h-8 rounded-full mr-2 border-2 border-white object-cover flex-shrink-0"></app-avatar>
-            <div class="text-sm font-rale truncate hover:underline">{{ user.user.name }}</div>
-          </a>
-          <div class="flex content-center justify-between items-center">
-            <div class="pt-0 flex justify-end items-center gap-1.5 flex-shrink-0">
-              <button
-                class="select-none w-7 h-6 flex items-center justify-center rounded-lg bg-gray-200 hover:bg-gray-300 transition-colors"
-                type="button"
-                title="Message"
-                (click)="messageUser(user.user)"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.86 9.86 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                </svg>
-              </button>
-              <button
-                class="select-none w-[50px] h-6 rounded-lg
-                  {{ user.followed ? 'bg-red-600' : 'bg-green' }}
-                  text-center align-middle text-xs font-semibold text-white
-                  shadow-md shadow-green-light/10 transition-all hover:shadow-lg
-                  hover:shadow-green-light/50 focus:opacity-[0.85] focus:shadow-none
-                  active:opacity-[0.85] active:shadow-none"
-                type="button"
-                data-ripple-light="true"
-                (click)="follow(user.user.id!)"
-              >
-                {{  user.followed ? 'Unfollow' : 'Follow' }}
-              </button>
-            </div>
+    <div class="relative text-gray-500">
+      <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 opacity-50 pointer-events-none" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+      </svg>
+      <input
+        class="block w-full h-9 rounded-full pl-9 pr-4 text-sm text-gray-900 bg-gray-100 border border-transparent outline-none transition-all focus:bg-white focus:border-green/30 focus:ring-2 focus:ring-green/10"
+        placeholder="Search people & organizations…"
+        [(ngModel)]="searchKeyword"
+        (input)="onSearchInput()"
+        (focus)="onSearchInput()"
+        (keydown)="onSearchKeydown($event)"
+        autocomplete="off"
+      />
+    </div>
 
+    <!-- SEARCH RESULTS DROPDOWN -->
+    <div *ngIf="showSearchResults"
+         class="absolute top-full mt-2 w-full max-w-[420px] bg-white rounded-2xl shadow-xl border border-gray-100 z-20 overflow-hidden">
+
+      <!-- RESULTS -->
+      <ul *ngIf="searchResults.length > 0">
+        <li *ngFor="let result of searchResults; let i = index"
+            class="flex items-center gap-3 px-3 py-2.5 transition-colors cursor-pointer border-b last:border-b-0 border-gray-50"
+            [ngClass]="highlightedIndex === i ? 'bg-green/5' : 'hover:bg-gray-50'">
+
+          <!-- AVATAR + INFO (navigate to profile) -->
+          <a [routerLink]="['/user-profile', result.user.id]"
+             (click)="showSearchResults = false; searchKeyword = ''"
+             class="flex items-center gap-2.5 flex-1 min-w-0">
+            <app-avatar [src]="result.user.profile" [name]="result.user.name"
+              sizeClass="w-9 h-9 rounded-full border border-gray-100 object-cover flex-shrink-0">
+            </app-avatar>
+            <div class="min-w-0 flex-1">
+              <div class="flex items-center gap-2">
+                <span class="text-sm font-semibold text-gray-900 truncate capitalize">{{ result.user.name }}</span>
+                <span class="text-[10px] font-bold px-1.5 py-0.5 rounded-full flex-shrink-0"
+                      [ngClass]="roleBadgeClass(result.user.role)">
+                  {{ roleLabel(result.user.role) }}
+                </span>
+              </div>
+              <div class="text-xs text-gray-400 truncate">{{ result.user.email }}</div>
+            </div>
+          </a>
+
+          <!-- ACTIONS -->
+          <div class="flex items-center gap-1.5 flex-shrink-0">
+            <button type="button" title="Message"
+              class="w-7 h-7 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 transition-colors"
+              (click)="messageUser(result.user)">
+              <svg class="w-3.5 h-3.5 text-gray-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.86 9.86 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+              </svg>
+            </button>
+            <button type="button"
+              class="text-xs font-bold px-3 h-7 rounded-full transition-colors"
+              [ngClass]="followBtnClass(result)"
+              (click)="follow(result.user.id!)">
+              {{ followLabel(result) }}
+            </button>
           </div>
         </li>
       </ul>
-      <div *ngIf="searchResults.length === 0" class="px-3 py-3 text-sm text-gray-500 font-rale text-center">
-        No users found.
+
+      <!-- EMPTY STATE -->
+      <div *ngIf="searchResults.length === 0" class="px-4 py-8 text-center">
+        <div class="text-3xl mb-2">🔍</div>
+        <p class="text-sm font-medium text-gray-500">No results for "<span class="text-gray-800">{{ searchKeyword }}</span>"</p>
+        <p class="text-xs text-gray-400 mt-1">Try a different name or email</p>
+      </div>
+
+      <!-- HINT -->
+      <div *ngIf="searchResults.length > 0" class="px-3 py-1.5 bg-gray-50 border-t border-gray-100 flex items-center gap-2 text-xs text-gray-400">
+        <span>↑↓ navigate</span>
+        <span class="mx-1">·</span>
+        <span>↵ open profile</span>
+        <span class="mx-1">·</span>
+        <span>esc close</span>
       </div>
     </div>
+    <!-- END DROPDOWN -->
   </div>
   <!--END SEARCH BAR-->
 

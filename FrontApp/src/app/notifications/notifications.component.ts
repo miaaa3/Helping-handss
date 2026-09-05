@@ -2,6 +2,8 @@ import { Component, HostListener, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { NotificationService } from '../services/notification.service';
 import { Notification } from '../models/notification';
+import { FollowService, PendingRequest } from '../services/follow.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-notifications',
@@ -14,13 +16,48 @@ export class NotificationsComponent implements OnInit {
   initialLoad = true;
   hasMore = true;
 
+  pendingRequests: PendingRequest[] = [];
+
   private readonly pageSize = 20;
   private page = 0;
 
-  constructor(private notificationService: NotificationService, private router: Router) {}
+  constructor(
+    private notificationService: NotificationService,
+    private followService: FollowService,
+    private toastr: ToastrService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.loadNotifications(true);
+    this.loadPendingRequests();
+  }
+
+  loadPendingRequests(): void {
+    this.followService.getPendingRequests().subscribe({
+      next: (requests) => (this.pendingRequests = requests),
+      error: (err) => console.error('Error loading follow requests:', err)
+    });
+  }
+
+  acceptRequest(request: PendingRequest): void {
+    this.followService.acceptRequest(request.id).subscribe({
+      next: () => {
+        this.pendingRequests = this.pendingRequests.filter(r => r.id !== request.id);
+        this.toastr.success(`You are now following ${request.follower.name}!`);
+      },
+      error: (err) => console.error('Error accepting request:', err)
+    });
+  }
+
+  rejectRequest(request: PendingRequest): void {
+    this.followService.rejectRequest(request.id).subscribe({
+      next: () => {
+        this.pendingRequests = this.pendingRequests.filter(r => r.id !== request.id);
+        this.toastr.info('Follow request declined.');
+      },
+      error: (err) => console.error('Error rejecting request:', err)
+    });
   }
 
   /** Loads notifications page by page. Pass reset=true to reload from the first page. */

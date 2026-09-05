@@ -23,18 +23,19 @@ public interface UserRepository extends JpaRepository<UserEntity,Long> {
             "WHERE f.follower.id = :userId AND u.id <> :userId")
     List<?> findUsersFollowingById(@Param("userId") Long userId);
 
-    @Query(value = "select count(*) from follows f , users u where u.id=f.follower_id and following_id= :userId and follower_id <> :userId", nativeQuery = true)
+    @Query(value = "select count(*) from follows f , users u where u.id=f.follower_id and following_id= :userId and follower_id <> :userId and f.status='ACCEPTED'", nativeQuery = true)
     int numberOfFollowers(@Param("userId") Long userId);
 
-    @Query(value = "select count(*) from follows f , users u where u.id=f.following_id and follower_id= :userId and  following_id <> :userId", nativeQuery = true)
+    @Query(value = "select count(*) from follows f , users u where u.id=f.following_id and follower_id= :userId and  following_id <> :userId and f.status='ACCEPTED'", nativeQuery = true)
     int numberOfFollowing(@Param("userId") Long userId);
 
     List<UserEntity> findByFollowers(UserEntity follower);
 
-    // "People you may know": users the current user isn't following yet (and isn't themselves),
-    // capped to keep the home sidebar lightweight.
-    @Query(value = "SELECT * FROM users u WHERE u.id <> :userId " +
+    // "People you may know": IDs of users the current user isn't following yet (and isn't themselves).
+    // Returns raw IDs so the caller can load each entity properly through JPA (JOINED inheritance safe).
+    @Query(value = "SELECT u.id FROM users u WHERE u.id <> :userId " +
+            "AND u.role <> 'ADMIN' " +
             "AND u.id NOT IN (SELECT following_id FROM follows WHERE follower_id = :userId) " +
             "ORDER BY RAND() LIMIT 5", nativeQuery = true)
-    List<UserEntity> findSuggestedUsers(@Param("userId") Long userId);
+    List<Long> findSuggestedUserIds(@Param("userId") Long userId);
 }

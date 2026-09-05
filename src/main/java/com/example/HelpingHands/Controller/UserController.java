@@ -5,6 +5,8 @@ import com.example.HelpingHands.DTO.PublicProfileDTO;
 import com.example.HelpingHands.DTO.SearchResultWithFollowStatusDTO;
 import com.example.HelpingHands.DTO.UserDTO;
 import com.example.HelpingHands.DTO.VolunteerUpdateRequest;
+import com.example.HelpingHands.Entity.Follow;
+import com.example.HelpingHands.Entity.FollowStatus;
 import com.example.HelpingHands.Entity.Organization;
 import com.example.HelpingHands.Entity.UserEntity;
 import com.example.HelpingHands.Entity.Volunteer;
@@ -37,8 +39,8 @@ public class UserController {
         UserEntity user = userService.findByEmail(principal.getName());
         UserDTO userDTO = new UserDTO();
         userDTO.setUser(user);
-        userDTO.setNumberOfFollowers(user.getFollowers().size() - 1);
-        userDTO.setNumberOfFollowing(user.getFollowing().size() - 1);
+        userDTO.setNumberOfFollowers(userRepository.numberOfFollowers(user.getId()));
+        userDTO.setNumberOfFollowing(userRepository.numberOfFollowing(user.getId()));
 
         return ResponseEntity.ok(userDTO);
     }
@@ -92,7 +94,14 @@ public class UserController {
         profileDTO.setNumberOfFollowers(userRepository.numberOfFollowers(target.getId()));
         profileDTO.setNumberOfFollowing(userRepository.numberOfFollowing(target.getId()));
         profileDTO.setOwnProfile(target.getId().equals(currentUser.getId()));
-        profileDTO.setFollowing(profileDTO.isOwnProfile() ? false : followService.isFollowing(currentUser, target));
+
+        if (!profileDTO.isOwnProfile()) {
+            Follow existingFollow = followService.findFollowByFollowerAndFollowing(currentUser, target);
+            if (existingFollow != null) {
+                profileDTO.setFollowStatus(existingFollow.getStatus().name());
+                profileDTO.setFollowing(existingFollow.getStatus() == FollowStatus.ACCEPTED);
+            }
+        }
 
         return ResponseEntity.ok(profileDTO);
     }

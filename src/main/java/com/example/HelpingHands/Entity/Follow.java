@@ -27,6 +27,12 @@ public class Follow {
     @CreatedDate
     private Date followedAt;
 
+    /** PENDING until the target accepts; ACCEPTED once confirmed.
+     *  Existing rows default to ACCEPTED via the DB column default. */
+    @Enumerated(EnumType.STRING)
+    @Column(length = 10, nullable = false, columnDefinition = "VARCHAR(10) NOT NULL DEFAULT 'ACCEPTED'")
+    private FollowStatus status = FollowStatus.ACCEPTED;
+
     @JsonBackReference(value = "followers")
     @ManyToOne
     @JoinColumn(name = "follower_id", referencedColumnName = "id")
@@ -45,5 +51,6 @@ public class Follow {
     public Follow(UserEntity follower, UserEntity following) {
         this.follower = follower;
         this.following = following;
+        this.status = FollowStatus.PENDING;
     }
 }

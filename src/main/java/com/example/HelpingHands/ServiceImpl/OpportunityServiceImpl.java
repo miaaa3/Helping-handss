@@ -92,6 +92,12 @@ public class OpportunityServiceImpl implements OpportunityService {
 
     @Override
     public List<OpportunityResponse> getOpportunitiesForFollowed(Long userId) {
+        UserEntity user = userRepository.findById(userId).orElse(null);
+        // Admin sees all public opportunities in the feed (they follow nobody by design).
+        if (user != null && "ADMIN".equals(user.getRole())) {
+            return opportunityRepository.findPublicOpportunities().stream()
+                    .map(OpportunityResponse::fromEntity).toList();
+        }
         List<UserEntity> followedUsers = followService.getFollowing(userId);
         if (followedUsers.isEmpty()) {
             return List.of();

@@ -67,7 +67,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserEntity> getSuggestedUsers(Long userId) {
-        return userRepository.findSuggestedUsers(userId);
+        // Load each user by ID so Hibernate resolves the JOINED-inheritance subclass correctly.
+        return userRepository.findSuggestedUserIds(userId).stream()
+                .map(id -> userRepository.findById(id).orElse(null))
+                .filter(u -> u != null)
+                .collect(Collectors.toList());
     }
 
     @Override

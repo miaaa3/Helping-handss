@@ -34,4 +34,10 @@ public interface OpportunityRepository extends JpaRepository<Opportunity, Long> 
 
     /** All opportunities platform-wide, including drafts, newest first - for the admin moderation view. */
     List<Opportunity> findAllByOrderByCreatedAtDesc();
+
+    /** Public discovery: only OPEN opportunities from VERIFIED organizations, soonest first. */
+    @Query("SELECT o FROM Opportunity o WHERE o.status = com.example.HelpingHands.Entity.OpportunityStatus.OPEN " +
+            "AND o.organization.verificationStatus = com.example.HelpingHands.Entity.OrganizationVerificationStatus.VERIFIED " +
+            "ORDER BY o.date ASC")
+    List<Opportunity> findPublicOpportunities();
 }

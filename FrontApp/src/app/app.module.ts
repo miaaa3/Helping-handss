@@ -56,6 +56,8 @@ import { AdminOrganizationsComponent } from './admin-dashboard/admin-organizatio
 import { AdminUsersComponent } from './admin-dashboard/admin-users/admin-users.component';
 import { AdminContentComponent } from './admin-dashboard/admin-content/admin-content.component';
 import { AdminDonationsComponent } from './admin-dashboard/admin-donations/admin-donations.component';
+import { PublicOpportunitiesComponent } from './public-opportunities/public-opportunities.component';
+import { PublicOrganizationsComponent } from './public-organizations/public-organizations.component';
 
 @NgModule({
   declarations: [
@@ -94,6 +96,8 @@ import { AdminDonationsComponent } from './admin-dashboard/admin-donations/admin
     AdminUsersComponent,
     AdminContentComponent,
     AdminDonationsComponent,
+    PublicOpportunitiesComponent,
+    PublicOrganizationsComponent,
 
   ],
   imports: [

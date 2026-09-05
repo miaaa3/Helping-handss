@@ -11,6 +11,7 @@ import { FollowService } from '../services/follow.service';
 import { Opportunity } from '../models/opportunity';
 import { OpportunityService } from '../services/opportunity.service';
 import { PostComponent } from '../post/post.component';
+import { ToastrService } from 'ngx-toastr';
 
 
 @Component({
@@ -47,7 +48,7 @@ export class HomeComponent implements OnInit {
 
   constructor(private postService : PostService,private userService:UserService,
      private router: Router, private userDataService : UserDataService, private followService: FollowService,
-     private opportunityService: OpportunityService) {
+     private opportunityService: OpportunityService, private toastr: ToastrService) {
     this.userId=Number(sessionStorage.getItem(USER_ID));
   }
 
@@ -153,18 +154,18 @@ export class HomeComponent implements OnInit {
     );
   }
 
-  /** Follow a suggested user and drop them from the "People you may know" list. */
+  /** Send a follow request to a suggested user and remove them from the list. */
   followSuggestion(userId: number | undefined): void {
     if (!userId) return;
-    this.followService.follow(userId).subscribe(
-      () => {
+    this.followService.follow(userId).subscribe({
+      next: (resp) => {
         this.suggestions = this.suggestions.filter((u) => u.id !== userId);
-        this.numberOfFollowing++;
+        if (resp.status === 'PENDING') {
+          this.toastr.info('Follow request sent!');
+        }
       },
-      (error) => {
-        console.error('Error following user:', error);
-      }
-    );
+      error: (err) => console.error('Error sending follow request:', err)
+    });
   }
 
 }

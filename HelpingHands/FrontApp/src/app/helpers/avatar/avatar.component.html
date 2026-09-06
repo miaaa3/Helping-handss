@@ -1,0 +1,6 @@
+<img *ngIf="hasImage" [src]="src" [ngClass]="sizeClass" alt="">
+<div *ngIf="!hasImage"
+     [ngClass]="sizeClass"
+     class="flex items-center justify-center text-white font-semibold select-none"
+     [style.background-color]="bgColor"
+     [style.font-size]="fontSize">{{ initials }}</div>

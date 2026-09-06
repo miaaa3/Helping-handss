@@ -1,0 +1,36 @@
+<app-main-navbar></app-main-navbar>
+
+<div class="bg-gray-200 font-rale min-h-screen">
+<div class="flex max-w-7xl mx-auto">
+
+<!--LEFT SIDEBAR: nav shortcuts-->
+<aside class="left-sidebar-area w-64 hidden lg:block mt-24 px-4">
+  <div class="sticky top-24 flex flex-col gap-4">
+    <app-main-sidebar></app-main-sidebar>
+  </div>
+</aside>
+<!--END LEFT SIDEBAR-->
+
+<main class="flex-1 min-w-0 max-w-5xl mx-auto pt-24 px-4 pb-20 lg:pb-6">
+
+  <h1 class="text-lg font-semibold text-gray-900 mb-4">Admin Panel</h1>
+
+  <!-- TABS -->
+  <div class="flex gap-2 mb-4 overflow-x-auto">
+    <button *ngFor="let tab of tabs" (click)="activeTab = tab.id"
+      class="text-sm font-semibold px-4 py-2 rounded-full whitespace-nowrap transition-colors"
+      [ngClass]="activeTab === tab.id ? 'bg-green text-white shadow-sm' : 'bg-white-chalk text-gray-600 hover:bg-gray-100'">
+      {{ tab.label }}
+    </button>
+  </div>
+  <!-- END TABS -->
+
+  <app-admin-organizations *ngIf="activeTab === 'organizations'"></app-admin-organizations>
+  <app-admin-users *ngIf="activeTab === 'users'"></app-admin-users>
+  <app-admin-content *ngIf="activeTab === 'content'"></app-admin-content>
+  <app-admin-donations *ngIf="activeTab === 'donations'"></app-admin-donations>
+
+</main>
+
+</div>
+</div>

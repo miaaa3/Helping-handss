@@ -1,0 +1,136 @@
+<app-main-navbar></app-main-navbar>
+
+<div class="bg-gray-200 font-rale min-h-screen">
+<div class="flex max-w-7xl mx-auto">
+
+<!--LEFT SIDEBAR: profile summary + nav shortcuts-->
+<aside class="left-sidebar-area w-64 hidden lg:block mt-24 px-4">
+  <div class="sticky top-24 flex flex-col gap-4">
+
+    <!--PROFILE SUMMARY-->
+    <div class="bg-white-chalk rounded-xl shadow-md overflow-hidden">
+      <div class="h-14 bg-gradient-to-r from-green to-green-dark"></div>
+      <div class="px-4 pb-4 -mt-8 flex flex-col items-center text-center">
+        <a routerLink="/user-profile" class="flex flex-col items-center">
+          <app-avatar [src]="user.profile" [name]="user.name" sizeClass="w-16 h-16 rounded-full border-4 border-white-chalk object-cover flex-shrink-0"></app-avatar>
+          <div class="mt-2 font-semibold capitalize hover:underline">{{user.name}}</div>
+        </a>
+        <div class="text-xs text-gray-500">{{user.fullName}}</div>
+        <div class="flex w-full mt-3 pt-3 border-t border-gray-200 justify-around text-xs">
+          <div class="text-center"><span class="font-bold block">{{numberOfFollowers}}</span>Followers</div>
+          <div class="text-center"><span class="font-bold block">{{numberOfFollowing}}</span>Following</div>
+        </div>
+      </div>
+    </div>
+    <!--END PROFILE SUMMARY-->
+
+    <!--NAV SHORTCUTS-->
+    <app-main-sidebar></app-main-sidebar>
+    <!--END NAV SHORTCUTS-->
+  </div>
+</aside>
+<!--END LEFT SIDEBAR-->
+
+
+<!--CENTER FEED-->
+<main class="flex-1 min-w-0 max-w-2xl mx-auto px-4 mt-24 pb-20 lg:pb-8 flex flex-col gap-4">
+
+  <!--CREATE POST-->
+  <div class="bg-white-chalk rounded-xl shadow-md p-4 transition-all">
+    <div class="flex items-start gap-3">
+      <app-avatar [src]="user.profile" [name]="user.name" sizeClass="w-10 h-10 rounded-full object-cover flex-shrink-0"></app-avatar>
+      <textarea
+        class="flex-1 w-full bg-gray-100 rounded-2xl px-4 py-2.5 text-sm resize-none border border-transparent outline-none transition-all focus:bg-white focus:border-green/40"
+        [rows]="composerExpanded ? 3 : 1" spellcheck="false" name="content"
+        [placeholder]="'What\'s on your mind, ' + user.name + '?'"
+        (focus)="composerExpanded = true"
+        [(ngModel)]="post.content"></textarea>
+    </div>
+
+    <!--IMAGE/VIDEO PREVIEWS-->
+    <div *ngIf="filePreviews.length" class="animate-fade-in mt-3 pl-[52px] grid gap-2" [ngClass]="filePreviews.length === 1 ? 'grid-cols-1' : 'grid-cols-2'">
+      <div *ngFor="let preview of filePreviews; let i = index" class="relative rounded-xl overflow-hidden bg-gray-100">
+        <img [src]="preview" class="w-full h-40 object-cover" alt="">
+        <button type="button" (click)="removeSelectedFile(i)"
+          class="absolute top-2 right-2 w-6 h-6 flex items-center justify-center rounded-full bg-black/50 text-white hover:bg-black/70 transition-colors">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+    <!--END IMAGE/VIDEO PREVIEWS-->
+
+    <!--COMPOSER ACTIONS (shown once the composer is focused/expanded)-->
+    <div *ngIf="composerExpanded" class="animate-slide-down flex items-center justify-between mt-3 pt-3 border-t border-gray-200">
+      <label for="dropzone-file" class="flex items-center gap-2 text-sm text-gray-500 hover:bg-gray-100 rounded-lg px-3 py-1.5 cursor-pointer transition-colors">
+        <svg class="w-5 h-5 text-green" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M3 16l4.586-4.586a2 2 0 012.828 0L16 17m-2-2l1.586-1.586a2 2 0 012.828 0L21 16M3 12V8a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2v-2zM11 9a1 1 0 11-2 0 1 1 0 012 0z"/>
+        </svg>
+        Photo/Video
+        <input id="dropzone-file" type="file" class="hidden" multiple accept="image/*,video/*" (change)="onFileSelected($event)">
+      </label>
+      <div class="flex items-center gap-2">
+        <button type="button" (click)="cancelComposer()"
+          class="text-sm font-medium text-gray-500 hover:text-gray-700 px-4 py-1.5 rounded-full transition-colors">
+          Cancel
+        </button>
+        <button
+          class="bg-green text-white text-sm font-semibold px-6 py-1.5 rounded-full shadow-sm transition-all hover:shadow-md hover:bg-green-dark active:opacity-80 disabled:opacity-40 disabled:cursor-not-allowed disabled:shadow-none disabled:hover:shadow-none"
+          [disabled]="!post.content && selectedFiles.length === 0"
+          (click)="createPost()">Post</button>
+      </div>
+    </div>
+    <!--END COMPOSER ACTIONS-->
+  </div>
+  <!--END CREATE POST-->
+
+  <!--OPPORTUNITIES HIGHLIGHT-->
+  <div *ngIf="feedOpportunities.length" class="bg-white-chalk rounded-xl shadow-md p-4">
+    <div class="flex items-center justify-between mb-3">
+      <h5 class="text-sm font-semibold text-gray-900">Opportunities from organizations you follow</h5>
+      <a routerLink="/opportunities" class="text-xs font-semibold text-green hover:underline">See all</a>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+      <app-opportunity-card *ngFor="let opportunity of feedOpportunities" [opportunity]="opportunity"></app-opportunity-card>
+    </div>
+  </div>
+  <!--END OPPORTUNITIES HIGHLIGHT-->
+
+  <!--ALL POSTS-->
+  <app-post></app-post>
+  <!--END ALL POSTS-->
+
+</main>
+<!--END CENTER FEED-->
+
+
+<!--RIGHT SIDEBAR: people you may know-->
+<aside class="right-sidebar-area w-72 hidden lg:block mt-24 px-4">
+  <div class="sticky top-24 bg-white-chalk rounded-xl shadow-md p-4">
+    <h5 class="text-sm font-semibold text-gray-900 mb-3">People you may know</h5>
+
+    <div *ngIf="suggestions.length === 0" class="text-xs text-gray-500">
+      No suggestions right now.
+    </div>
+
+    <div class="animate-fade-in flex items-center gap-3 py-2" *ngFor="let s of suggestions">
+      <a [routerLink]="['/user-profile', s.id]" class="flex items-center gap-3 flex-1 min-w-0">
+        <app-avatar [src]="s.profile" [name]="s.name" sizeClass="w-10 h-10 rounded-full object-cover flex-shrink-0"></app-avatar>
+        <div class="flex-1 min-w-0">
+          <div class="text-sm font-medium capitalize truncate hover:underline">{{s.name}}</div>
+          <div class="text-xs text-gray-500 capitalize">{{s.role | lowercase}}</div>
+        </div>
+      </a>
+      <button
+        (click)="followSuggestion(s.id)"
+        class="text-xs font-semibold text-green border border-green rounded-full px-3 py-1 flex-shrink-0 transition-colors hover:bg-green hover:text-white">
+        Follow
+      </button>
+    </div>
+  </div>
+</aside>
+<!--END RIGHT SIDEBAR-->
+
+</div>
+</div>

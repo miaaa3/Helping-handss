@@ -1,0 +1,50 @@
+<app-main-navbar></app-main-navbar>
+
+<div class="bg-gray-200 font-rale min-h-screen">
+<div class="flex max-w-7xl mx-auto">
+
+<!--LEFT SIDEBAR: nav shortcuts-->
+<aside class="left-sidebar-area w-64 hidden lg:block mt-24 px-4">
+  <div class="sticky top-24 flex flex-col gap-4">
+    <app-main-sidebar></app-main-sidebar>
+  </div>
+</aside>
+<!--END LEFT SIDEBAR-->
+
+<main class="flex-1 min-w-0 pt-24 px-4 pb-6">
+<div class="my-donations-container">
+  <h1 class="my-donations-title">My Donations</h1>
+
+  <div *ngIf="loading" class="my-donations-loading">
+    <mat-spinner diameter="32"></mat-spinner>
+  </div>
+
+  <p *ngIf="errorMessage" class="my-donations-error">{{ errorMessage }}</p>
+
+  <p *ngIf="!loading && !errorMessage && donations.length === 0" class="my-donations-empty">
+    You haven't made any donations yet.
+  </p>
+
+  <div class="donation-list" *ngIf="!loading && donations.length > 0">
+    <div class="donation-card" *ngFor="let donation of donations">
+      <div class="donation-card-main">
+        <span class="donation-org">{{ donation.organizationName }}</span>
+        <span class="donation-amount">{{ donation.amount | number:'1.2-2' }} {{ donation.currency.toUpperCase() }}</span>
+      </div>
+      <div class="donation-card-meta">
+        <span class="donation-date">{{ donation.createdAt | date:'medium' }}</span>
+        <span class="donation-status" [ngClass]="'status-' + donation.status.toLowerCase()">{{ donation.status }}</span>
+      </div>
+      <p class="donation-note" *ngIf="statusNote(donation)">{{ statusNote(donation) }}</p>
+      <p class="donation-message" *ngIf="donation.message">"{{ donation.message }}"</p>
+      <div class="donation-card-footer">
+        <span class="donation-ref" *ngIf="donation.transactionRef" title="Transaction reference">Ref: {{ donation.transactionRef }}</span>
+        <button type="button" class="donation-receipt-btn" (click)="openReceipt(donation)">View receipt</button>
+      </div>
+    </div>
+  </div>
+</div>
+</main>
+
+</div>
+</div>

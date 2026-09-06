@@ -1,0 +1,55 @@
+<h2 mat-dialog-title>{{ isEdit ? 'Edit Opportunity' : 'Post a New Opportunity' }}</h2>
+
+<div mat-dialog-content class="opportunity-form-content">
+  <mat-form-field appearance="outline" class="w-full">
+    <mat-label>Title</mat-label>
+    <input matInput [(ngModel)]="form.title" name="title" maxlength="120">
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="w-full">
+    <mat-label>Description</mat-label>
+    <textarea matInput rows="4" [(ngModel)]="form.description" name="description"></textarea>
+  </mat-form-field>
+
+  <div class="opportunity-form-row">
+    <mat-form-field appearance="outline" class="flex-1">
+      <mat-label>Category</mat-label>
+      <mat-select [(ngModel)]="form.category" name="category">
+        <mat-option *ngFor="let c of categories" [value]="c" class="capitalize">{{ c | lowercase }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="flex-1">
+      <mat-label>Status</mat-label>
+      <mat-select [(ngModel)]="form.status" name="status">
+        <mat-option *ngFor="let s of statuses" [value]="s" class="capitalize">{{ s | lowercase }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <div class="opportunity-form-row">
+    <mat-form-field appearance="outline" class="flex-1">
+      <mat-label>Date & time</mat-label>
+      <input matInput type="datetime-local" [(ngModel)]="form.date" name="date">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="flex-1">
+      <mat-label>Needed volunteers</mat-label>
+      <input matInput type="number" min="1" step="1" [(ngModel)]="form.neededVolunteers" name="neededVolunteers">
+    </mat-form-field>
+  </div>
+
+  <mat-form-field appearance="outline" class="w-full">
+    <mat-label>Location</mat-label>
+    <input matInput [(ngModel)]="form.location" name="location">
+  </mat-form-field>
+
+  <p *ngIf="errorMessage" class="opportunity-form-error">{{ errorMessage }}</p>
+</div>
+
+<div mat-dialog-actions align="end">
+  <button mat-button (click)="close()">Cancel</button>
+  <button mat-raised-button color="primary" (click)="save()" [disabled]="loading">
+    {{ loading ? 'Saving...' : (isEdit ? 'Save changes' : 'Post opportunity') }}
+  </button>
+</div>

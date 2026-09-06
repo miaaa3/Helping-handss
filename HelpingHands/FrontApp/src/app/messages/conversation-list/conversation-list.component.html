@@ -1,0 +1,37 @@
+<div class="conversation-list h-full overflow-y-auto">
+  <h2 class="px-4 py-3 text-lg font-semibold font-rale text-green-dark border-b border-gray-200">
+    Messages
+  </h2>
+
+  <div *ngIf="conversations.length === 0" class="px-4 py-6 text-sm text-gray-500 text-center">
+    No conversations yet.
+  </div>
+
+  <div
+    *ngFor="let conversation of conversations"
+    (click)="selectConversation(conversation)"
+    class="flex items-center gap-3 px-4 py-3 cursor-pointer border-b border-gray-100 hover:bg-gray-100 transition-colors"
+    [ngClass]="{ 'bg-green-light/10': conversation.otherUserId === selectedUserId }"
+  >
+    <app-avatar [src]="conversation.otherUserProfile" [name]="conversation.otherUserName"
+      sizeClass="w-12 h-12 rounded-full object-cover border border-gray-200 flex-shrink-0"></app-avatar>
+
+    <div class="flex-1 min-w-0">
+      <div class="flex items-center justify-between">
+        <span class="font-semibold text-sm font-rale truncate">{{ conversation.otherUserName }}</span>
+        <span class="text-xs text-gray-400 whitespace-nowrap ml-2">{{ conversation.lastMessageAt | date: 'shortTime' }}</span>
+      </div>
+      <div class="flex items-center justify-between mt-0.5">
+        <p class="text-sm text-gray-500 truncate" [ngClass]="{ 'font-semibold text-gray-700': conversation.unreadCount > 0 }">
+          {{ conversation.lastMessage }}
+        </p>
+        <span
+          *ngIf="conversation.unreadCount > 0"
+          class="ml-2 min-w-[1.25rem] h-5 flex items-center justify-center rounded-full bg-green text-white text-xs font-bold px-1.5"
+        >
+          {{ conversation.unreadCount }}
+        </span>
+      </div>
+    </div>
+  </div>
+</div>

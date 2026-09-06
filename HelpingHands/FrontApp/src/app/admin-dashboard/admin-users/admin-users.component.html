@@ -1,0 +1,37 @@
+<div *ngIf="loading" class="flex justify-center py-12">
+  <mat-spinner diameter="36"></mat-spinner>
+</div>
+
+<div *ngIf="!loading" class="bg-white-chalk rounded-xl shadow-md p-4">
+  <div *ngIf="!users.length" class="text-sm text-gray-500 text-center py-4">
+    No users found.
+  </div>
+
+  <div *ngFor="let user of users" class="flex items-center justify-between gap-3 py-3 border-b border-gray-100 last:border-b-0">
+    <div class="flex items-center gap-3 min-w-0">
+      <app-avatar [src]="user.profile" [name]="user.name" sizeClass="w-10 h-10 rounded-full object-cover flex-shrink-0"></app-avatar>
+      <div class="min-w-0">
+        <div class="text-sm font-medium text-gray-900 truncate flex items-center gap-1">
+          {{ user.name }}
+          <app-verified-badge *ngIf="user.verificationStatus" [status]="user.verificationStatus"></app-verified-badge>
+        </div>
+        <div class="text-xs text-gray-500 truncate">{{ user.email }} &middot; {{ user.role | lowercase }}</div>
+      </div>
+    </div>
+    <div class="flex items-center gap-2 flex-shrink-0">
+      <span class="text-xs font-semibold px-2.5 py-1 rounded-full"
+        [ngClass]="user.enabled ? 'bg-green-light/10 text-green' : 'bg-red-100 text-red-500'">
+        {{ user.enabled ? 'Enabled' : 'Disabled' }}
+      </span>
+
+      <mat-spinner *ngIf="updatingId === user.id" diameter="18"></mat-spinner>
+
+      <button *ngIf="updatingId !== user.id && user.role !== 'ADMIN'" (click)="toggleEnabled(user)"
+        class="text-xs font-semibold px-3 py-1 rounded-full transition-colors"
+        [ngClass]="user.enabled ? 'bg-white-chalk border border-gray-200 text-red-500 hover:bg-red-50' : 'bg-green text-white shadow-sm hover:shadow-md hover:bg-green-dark'">
+        {{ user.enabled ? 'Disable' : 'Enable' }}
+      </button>
+      <span *ngIf="user.role === 'ADMIN'" class="text-xs text-gray-400 italic">Protected</span>
+    </div>
+  </div>
+</div>

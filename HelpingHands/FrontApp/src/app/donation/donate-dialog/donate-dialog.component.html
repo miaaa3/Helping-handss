@@ -1,0 +1,52 @@
+<h2 mat-dialog-title>Donate to {{ data.organizationName }}</h2>
+
+<div mat-dialog-content class="donate-dialog-content">
+  <ng-container *ngIf="step === 'amount'">
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Amount (USD)</mat-label>
+      <span matPrefix>$&nbsp;</span>
+      <input matInput type="number" min="1" step="1" [(ngModel)]="amount" name="amount">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Message (optional)</mat-label>
+      <textarea matInput rows="2" maxlength="500" [(ngModel)]="message" name="message"></textarea>
+    </mat-form-field>
+
+    <mat-checkbox [(ngModel)]="anonymous" name="anonymous">Donate anonymously</mat-checkbox>
+  </ng-container>
+
+  <ng-container *ngIf="step === 'payment'">
+    <p class="donate-summary">
+      Donating <strong>${{ amount }}</strong> to <strong>{{ data.organizationName }}</strong>
+    </p>
+    <div #paymentElement class="payment-element"></div>
+  </ng-container>
+
+  <ng-container *ngIf="step === 'success'">
+    <div class="donate-success">
+      <p class="donate-success-title">Thank you for your donation!</p>
+      <p class="donate-success-subtitle">Your support means a lot to {{ data.organizationName }}.</p>
+    </div>
+  </ng-container>
+
+  <p *ngIf="errorMessage" class="donate-error">{{ errorMessage }}</p>
+
+  <div *ngIf="loading" class="donate-loading">
+    <mat-spinner diameter="28"></mat-spinner>
+  </div>
+</div>
+
+<div mat-dialog-actions align="end">
+  <button mat-button (click)="close()">{{ step === 'success' ? 'Close' : 'Cancel' }}</button>
+
+  <button mat-raised-button color="primary" *ngIf="step === 'amount'"
+          (click)="proceedToPayment()" [disabled]="loading">
+    Continue
+  </button>
+
+  <button mat-raised-button color="primary" *ngIf="step === 'payment'"
+          (click)="confirmPayment()" [disabled]="loading">
+    {{ loading ? 'Processing...' : 'Donate $' + amount }}
+  </button>
+</div>

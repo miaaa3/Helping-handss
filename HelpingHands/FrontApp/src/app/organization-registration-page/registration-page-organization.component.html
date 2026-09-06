@@ -1,0 +1,98 @@
+<app-navbar-welcomepage></app-navbar-welcomepage>
+
+<div class="font-rale min-h-[calc(100vh-88px)] flex items-center justify-center bg-white px-4 py-10">
+
+  <div class="flex flex-col lg:flex-row w-full max-w-5xl bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-100">
+
+    <!-- Branded panel -->
+    <div class="lg:w-[42%] relative bg-no-repeat bg-cover bg-center min-h-[220px]" style="background-image: url('assets/images/org.jpg');">
+      <div class="absolute inset-0 bg-yellow/80 flex flex-col items-center justify-center text-center p-8 gap-3">
+        <img src="assets/images/heart-shaped.png" class="h-28">
+        <h2 class="font-Unica text-3xl text-black">Partner With Us!</h2>
+        <p class="text-black/80 text-sm max-w-xs">Register your organization and amplify your impact with Helping Hands.</p>
+      </div>
+    </div>
+
+    <!-- Form panel -->
+    <div class="lg:w-[58%] p-8 sm:p-10">
+      <form (ngSubmit)="onSubmit()" [formGroup]="registrationForm">
+        <h2 class="font-Unica text-2xl text-black mb-6">Sign Up</h2>
+
+        <div class="grid gap-4 sm:grid-cols-2 mb-4">
+          <div>
+            <label for="organization-name" class="block text-sm font-medium leading-6 text-gray-900">Organization Name</label>
+            <div class="mt-2">
+              <input type="text" name="organization-name" id="organization-name" autocomplete="organization" class="block w-full rounded-md border border-gray-300 bg-transparent py-2 px-3 text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-green-light focus:border-green-light sm:text-sm" placeholder="Organization Name" [(ngModel)]="organization.name" formControlName="name">
+            </div>
+          </div>
+          <div>
+            <label for="founder-name" class="block text-sm font-medium leading-6 text-gray-900">Founder Name</label>
+            <div class="mt-2">
+              <input type="text" name="founder-name" id="founder-name" autocomplete="name" class="block w-full rounded-md border border-gray-300 bg-transparent py-2 px-3 text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-green-light focus:border-green-light sm:text-sm" placeholder="Founder Name" [(ngModel)]="organization.founder" formControlName="founderName">
+            </div>
+          </div>
+        </div>
+
+        <div class="grid gap-4 sm:grid-cols-2 mb-4">
+          <div>
+            <label for="email" class="block text-sm font-medium leading-6 text-gray-900">Email Address</label>
+            <div class="mt-2">
+              <input type="email" name="email" id="email" autocomplete="email" class="block w-full rounded-md border border-gray-300 bg-transparent py-2 px-3 text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-green-light focus:border-green-light sm:text-sm" placeholder="HelpingHands@example.com" [(ngModel)]="organization.email" [required]="true" formControlName="email">
+            </div>
+          </div>
+          <div>
+            <label for="type" class="block text-sm font-medium leading-6 text-gray-900">Type</label>
+            <div class="mt-2">
+              <select id="type" name="type" autocomplete="off" class="block w-full rounded-md border border-gray-300 bg-transparent py-2 px-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-green-light focus:border-green-light sm:text-sm h-[42px]" [(ngModel)]="organization.type" formControlName="type">
+                <option value="Health and Medical Services">Health and Medical Services</option>
+                <option value="Education and Learning">Education and Learning</option>
+                <option value="Animal Welfare">Animal Welfare</option>
+                <option value="Environmental Conservation">Environmental Conservation</option>
+                <option value="Community Development">Community Development</option>
+                <option value="Disability Services">Disability Services</option>
+                <option value="Youth and Child Services">Youth and Child Services</option>
+                <option value="Human Rights and Advocacy">Human Rights and Advocacy</option>
+                <option value="Elderly Care and Support">Elderly Care and Support</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid gap-4 sm:grid-cols-2 mb-4">
+          <div>
+            <label for="phone" class="block text-sm font-medium leading-6 text-gray-900">Phone Number</label>
+            <div class="mt-2">
+              <input type="tel" name="phone" id="phone" autocomplete="tel" class="block w-full rounded-md border border-gray-300 bg-transparent py-2 px-3 text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-green-light focus:border-green-light sm:text-sm" placeholder="+123 4567890" [(ngModel)]="organization.phone" formControlName="phone">
+            </div>
+          </div>
+          <div>
+            <label for="founded-date" class="block text-sm font-medium leading-6 text-gray-900">Founded Date</label>
+            <div class="mt-2">
+              <input type="date" name="founded-date" id="founded-date" class="block w-full rounded-md border border-gray-300 bg-transparent py-2 px-3 text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-green-light focus:border-green-light sm:text-sm h-[42px]" [(ngModel)]="organization.foundedAt" formControlName="foundedAt">
+            </div>
+          </div>
+        </div>
+
+        <div class="grid gap-4 sm:grid-cols-2 mb-6">
+          <div>
+            <label for="address" class="block text-sm font-medium leading-6 text-gray-900">Address</label>
+            <div class="mt-2">
+              <input type="text" name="address" id="address" class="block w-full rounded-md border border-gray-300 bg-transparent py-2 px-3 text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-green-light focus:border-green-light sm:text-sm" placeholder="e.g. 123 Main St, City, State ZIP" [(ngModel)]="organization.address" formControlName="address">
+            </div>
+          </div>
+          <div>
+            <label for="password" class="block text-sm font-medium leading-6 text-gray-900">Password</label>
+            <div class="mt-2">
+              <input type="password" name="password" id="password" class="block w-full rounded-md border border-gray-300 bg-transparent py-2 px-3 text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-green-light focus:border-green-light sm:text-sm" placeholder="Password" [(ngModel)]="organization.password" formControlName="password">
+            </div>
+          </div>
+        </div>
+
+        <div class="flex flex-col sm:flex-row items-center gap-4">
+          <button type="submit" class="w-full sm:w-auto rounded-full bg-green hover:bg-green-light text-white font-semibold px-10 py-2.5 shadow-sm transition-colors">Save</button>
+          <p class="text-sm text-gray-600 sm:ml-auto">Registered already? <a routerLink="/login" class="font-semibold text-green hover:text-green-light">Login</a></p>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

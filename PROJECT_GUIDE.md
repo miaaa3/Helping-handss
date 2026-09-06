@@ -30,7 +30,7 @@ A volunteering platform connecting volunteers and organizations. Volunteers disc
 ### 1. Backend
 
 ```bash
-cd HelpingHands-backend
+cd backend/
 
 # First run — ensure the DB exists in MySQL:
 # CREATE DATABASE HelpingHands;
@@ -57,7 +57,7 @@ Sample data seeds automatically on first run (`sample-data.enabled=true`).
 ### 2. Frontend
 
 ```bash
-cd HelpingHands/FrontApp
+cd frontend/
 
 npm install
 npm start          # or: npx ng serve
@@ -106,7 +106,7 @@ All accounts share the same password: **`Password123!`**
 
 ```
 Helping-hands/
-├── HelpingHands-backend/          Spring Boot API
+├── backend/          Spring Boot API
 │   └── src/main/java/com/example/HelpingHands/
 │       ├── Configuration/         Security, CORS, WebSocket, Stripe, sample data seeder
 │       ├── Controller/            REST + STOMP endpoints
@@ -116,7 +116,7 @@ Helping-hands/
 │       ├── Service/ + ServiceImpl/ Business logic
 │       └── Exception/             Custom exceptions
 │
-└── HelpingHands/FrontApp/         Angular 16 app
+└── frontend/         Angular 16 app
     └── src/app/
         ├── home/                  Feed + sidebar
         ├── user-profile/          Profile page (Facebook-style)
@@ -271,12 +271,12 @@ Use Stripe test card `4242 4242 4242 4242`, any future expiry, any CVC.
 
 ```bash
 # Backend JAR
-cd HelpingHands-backend
+cd backend/
 ./mvnw clean package -DskipTests
 java -jar target/HelpingHands-*.jar
 
 # Frontend dist
-cd HelpingHands/FrontApp
+cd frontend/
 npx ng build --configuration production
 # Output in dist/ — serve with nginx or any static host
 ```

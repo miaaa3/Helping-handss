@@ -19,7 +19,7 @@ services:
       retries: 10
 
   backend:
-    build: ./HelpingHands-backend
+    build: ./backend
     environment:
       DB_URL: jdbc:mysql://mysql:3306/HelpingHands
       DB_USERNAME: root
@@ -39,7 +39,7 @@ services:
       - uploads-data:/app/uploads
 
   frontend:
-    build: ./HelpingHands/FrontApp
+    build: ./frontend
     depends_on:
       - backend
     ports:

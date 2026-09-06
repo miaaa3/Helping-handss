@@ -49,9 +49,9 @@ The repository is a monorepo with two applications and one orchestration layer:
 
 ```
 Helping-handss/
-├── HelpingHands/FrontApp/     Angular SPA, served by nginx
-├── HelpingHands-backend/      Spring Boot REST + WebSocket API
-└── docker-compose.yml         MySQL + backend + frontend, wired together
+├── frontend/            Angular SPA, served by nginx
+├── backend/             Spring Boot REST + WebSocket API
+└── docker-compose.yml   MySQL + backend + frontend, wired together
 ```
 
 In the container setup, nginx serves the Angular build and reverse-proxies API, auth, upload, and WebSocket traffic to the backend, so the whole app is same-origin — no CORS friction, and deployment is a single set of images. The database schema is managed by JPA (`ddl-auto=update`); no manual migrations are needed for local runs.

@@ -6,3 +6,4 @@ dist/
 *.iml
 .migration-backup/
 migrate-to-monorepo.sh
+uploads/

@@ -21,12 +21,12 @@ public interface PostRepository extends JpaRepository<Post,Long> {
     @Query(value = "SELECT p.* " +
             "FROM posts p " +
             "INNER JOIN follows f ON p.user_id = f.following_id " +
-            "WHERE f.follower_id = :followerId " +
+            "WHERE f.follower_id = :followerId AND f.status = 'ACCEPTED' " +
             "ORDER BY p.created_at DESC",
             countQuery = "SELECT COUNT(*) " +
             "FROM posts p " +
             "INNER JOIN follows f ON p.user_id = f.following_id " +
-            "WHERE f.follower_id = :followerId",
+            "WHERE f.follower_id = :followerId AND f.status = 'ACCEPTED'",
             nativeQuery = true)
     Page<Post> findPostsOfFollowedUser(@Param("followerId") Long followerId, Pageable pageable);
 

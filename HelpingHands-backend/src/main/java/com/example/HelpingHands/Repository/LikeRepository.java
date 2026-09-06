@@ -18,7 +18,7 @@ public interface LikeRepository extends JpaRepository<Like,Long> {
 
     List<Like> findByPostId(Long postId);
 
-    @Query(value = "SELECT * FROM Likes WHERE post_id = :post AND user_id = :user", nativeQuery = true)
+    @Query(value = "SELECT * FROM likes WHERE post_id = :post AND user_id = :user", nativeQuery = true)
     Like findByPostAndUser(@Param("post") Long postId, @Param("user") Long userId);
 
     Optional<Like> findByUserIdAndPostId(Long userId, Long postId);

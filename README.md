@@ -1,5 +1,7 @@
 # HelpingHands
 
+![CI](https://github.com/miaaa3/Helping-handss/actions/workflows/ci.yml/badge.svg)
+
 A full-stack volunteering platform that connects volunteers with organizations. Volunteers discover opportunities, apply, follow organizations, chat in real time, and donate; organizations post opportunities, manage applicants, and build a following; admins moderate the platform.
 
 > Full-stack monorepo: Spring Boot API + Angular SPA + MySQL, containerized so the whole stack runs with a single command.

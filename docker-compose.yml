@@ -1,0 +1,50 @@
+# One-command local stack: MySQL + Spring Boot API + Angular (nginx).
+#   docker compose up --build
+# Then open http://localhost:8081
+services:
+  mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: HelpingHands
+    # Host port 3307 avoids clashing with a local MySQL/MAMP on 3306/8889.
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-uroot", "-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build: ./HelpingHands-backend
+    environment:
+      DB_URL: jdbc:mysql://mysql:3306/HelpingHands
+      DB_USERNAME: root
+      DB_PASSWORD: root
+      CORS_ALLOWED_ORIGINS: http://localhost:8081
+      SAMPLE_DATA_ENABLED: "true"
+      # Stripe test placeholders — override with real test keys to try donations.
+      STRIPE_SECRET_KEY: sk_test_placeholder
+      STRIPE_PUBLISHABLE_KEY: pk_test_placeholder
+      STRIPE_WEBHOOK_SECRET: whsec_placeholder
+    depends_on:
+      mysql:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+    volumes:
+      - uploads-data:/app/uploads
+
+  frontend:
+    build: ./HelpingHands/FrontApp
+    depends_on:
+      - backend
+    ports:
+      - "8081:80"
+
+volumes:
+  mysql-data:
+  uploads-data:

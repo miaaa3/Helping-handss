@@ -1,0 +1,8 @@
+node_modules/
+target/
+dist/
+.angular/
+.idea/
+*.iml
+.migration-backup/
+migrate-to-monorepo.sh

@@ -39,6 +39,7 @@ public class WebSecurityConfiguration {
                         .requestMatchers("/ws/**").permitAll()
                         .requestMatchers("/api/donations/webhook", "/api/donations/config").permitAll()
                         .requestMatchers("/public/**").permitAll()
+                        .requestMatchers("/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**", "/v3/api-docs.yaml").permitAll()
                         .requestMatchers("/api/admin/**").hasAuthority("ADMIN")
                         .requestMatchers("/api/**").hasAnyAuthority("VOLUNTEER", "ORGANIZATION", "ADMIN")
                         .anyRequest().authenticated())

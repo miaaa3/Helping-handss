@@ -26,6 +26,7 @@ public class Volunteer extends UserEntity {
 
     private String phone;
 
+    @JsonIgnore
     @ElementCollection
     @CollectionTable(name = "volunteer_interests", joinColumns = @JoinColumn(name = "volunteer_id"))
     @Column(name = "interests")

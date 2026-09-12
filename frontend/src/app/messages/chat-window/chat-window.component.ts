@@ -51,7 +51,7 @@ export class ChatWindowComponent implements OnInit, OnChanges, AfterViewChecked,
         // If the other person's message arrives while this conversation is open,
         // tell the backend right away so unread counts stay accurate.
         if (Number(message.senderId) === Number(this.otherUserId)) {
-          this.chatService.markAsRead(this.otherUserId).subscribe();
+          this.chatService.markAsRead(this.otherUserId!).subscribe();
         }
       }
     });

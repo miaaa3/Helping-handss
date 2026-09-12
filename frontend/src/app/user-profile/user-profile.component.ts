@@ -40,7 +40,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
   isLiked: boolean[] = [];
   likesNumber: number[] = [];
   commentsNumber: number[] = [];
-  postsLoading = true;
+  postsLoading = false;
 
   followBusy = false;
   openDropdownIndex: number | null = null;

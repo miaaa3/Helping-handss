@@ -1,6 +1,7 @@
 package com.example.HelpingHands.Controller;
 
 import com.example.HelpingHands.DTO.FollowDTO;
+import com.example.HelpingHands.DTO.PendingRequestDTO;
 import com.example.HelpingHands.Entity.Follow;
 import com.example.HelpingHands.Entity.FollowStatus;
 import com.example.HelpingHands.Entity.UserEntity;
@@ -39,6 +40,9 @@ public class FollowController {
         if (follower == null || following == null) {
             return ResponseEntity.notFound().build();
         }
+        if (follower.getId().equals(following.getId())) {
+            return ResponseEntity.badRequest().body(Map.of("error", "You cannot follow yourself."));
+        }
 
         Follow existing = followService.findFollowByFollowerAndFollowing(follower, following);
         FollowDTO followDTO = new FollowDTO();
@@ -65,7 +69,16 @@ public class FollowController {
     @GetMapping("/requests/pending")
     public ResponseEntity<?> getPendingRequests(Principal principal) {
         UserEntity user = userService.findByEmail(principal.getName());
-        List<Follow> pending = followService.getPendingRequests(user);
+        List<PendingRequestDTO> pending = followService.getPendingRequests(user).stream()
+                .map(f -> new PendingRequestDTO(
+                        f.getId(),
+                        f.getFollowedAt(),
+                        f.getStatus() != null ? f.getStatus().name() : null,
+                        new PendingRequestDTO.Follower(
+                                f.getFollower().getId(),
+                                f.getFollower().getName(),
+                                f.getFollower().getProfile())))
+                .toList();
         return ResponseEntity.ok(pending);
     }
 

@@ -7,6 +7,11 @@ import com.example.HelpingHands.Entity.OpportunityStatus;
 import com.example.HelpingHands.Entity.Organization;
 import com.example.HelpingHands.Entity.OrganizationVerificationStatus;
 import com.example.HelpingHands.Entity.UserEntity;
+import com.example.HelpingHands.Entity.Volunteer;
+import com.example.HelpingHands.Repository.FollowRepository;
+import com.example.HelpingHands.Entity.FollowStatus;
+import com.example.HelpingHands.Entity.Follow;
+import com.example.HelpingHands.DTO.SuggestedOrgDTO;
 import com.example.HelpingHands.Repository.OpportunityRepository;
 import com.example.HelpingHands.Repository.OrganizationRepository;
 import com.example.HelpingHands.Repository.UserRepository;
@@ -16,7 +21,10 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -26,6 +34,62 @@ public class OpportunityServiceImpl implements OpportunityService {
     private final OrganizationRepository organizationRepository;
     private final UserRepository userRepository;
     private final FollowService followService;
+    private final FollowRepository followRepository;
+
+    @Override
+    public List<OpportunityResponse> getRecommendedForVolunteer(String volunteerEmail) {
+        UserEntity user = userRepository.findByEmail(volunteerEmail).orElse(null);
+        Set<OpportunityCategory> categories = extractInterestCategories(user);
+        // With interests: match categories. Without: fall back to public opportunities so the section is never empty.
+        List<Opportunity> matches = categories.isEmpty()
+                ? opportunityRepository.findPublicOpportunities()
+                : opportunityRepository.findRecommended(categories);
+        final Long uid = user != null ? user.getId() : null;
+        return matches.stream()
+                .filter(o -> uid == null || o.getApplications().stream()
+                        .noneMatch(a -> a.getVolunteer() != null && uid.equals(a.getVolunteer().getId())))
+                .limit(10)
+                .map(OpportunityResponse::fromEntity)
+                .collect(Collectors.toList());
+    }
+
+    /** Maps a volunteer's free-text interests onto opportunity categories (shared by recommendations). */
+    private Set<OpportunityCategory> extractInterestCategories(UserEntity user) {
+        Set<OpportunityCategory> categories = new HashSet<>();
+        if (user instanceof Volunteer volunteer && volunteer.getInterests() != null) {
+            for (String interest : volunteer.getInterests()) {
+                try { categories.add(OpportunityCategory.valueOf(interest.trim().toUpperCase().replace(" ", "_").replace("-", "_"))); }
+                catch (IllegalArgumentException ignored) { }
+            }
+        }
+        return categories;
+    }
+
+    @Override
+    public List<SuggestedOrgDTO> getSuggestedOrganizations(String volunteerEmail) {
+        UserEntity user = userRepository.findByEmail(volunteerEmail).orElse(null);
+        if (user == null) return List.of();
+        Set<OpportunityCategory> categories = extractInterestCategories(user);
+
+        List<Organization> candidates = categories.isEmpty()
+                ? opportunityRepository.findMostActiveOrganizations()
+                : opportunityRepository.findSuggestedOrganizationsByCategories(categories);
+        if (candidates.isEmpty()) candidates = opportunityRepository.findMostActiveOrganizations();
+
+        // Never suggest the user themselves or organizations they already follow / requested.
+        Set<Long> excluded = new HashSet<>();
+        excluded.add(user.getId());
+        for (Follow f : followRepository.findByFollowerAndStatus(user, FollowStatus.ACCEPTED))
+            if (f.getFollowing() != null) excluded.add(f.getFollowing().getId());
+        for (Follow f : followRepository.findByFollowerAndStatus(user, FollowStatus.PENDING))
+            if (f.getFollowing() != null) excluded.add(f.getFollowing().getId());
+
+        return candidates.stream()
+                .filter(o -> !excluded.contains(o.getId()))
+                .limit(6)
+                .map(o -> new SuggestedOrgDTO(o.getId(), o.getName(), o.getProfile(), o.getType(), o.getDescription()))
+                .collect(Collectors.toList());
+    }
 
     @Override
     public OpportunityResponse createOpportunity(Opportunity opportunity, String organizationEmail) {

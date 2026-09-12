@@ -71,28 +71,28 @@ public class SampleDataSeeder {
 
             Volunteer maya = ensureVolunteer("maya.volunteer@helpinghands.test", "maya", "Maya Carter",
                     "Paris, France", "+33 6 10 20 30 40", Gender.FEMALE,
-                    "Student volunteer focused on food security and mentoring.", Set.of("Food distribution", "Education", "Community events"));
+                    "Student volunteer focused on food security and mentoring.", Set.of("Community", "Education"));
             Volunteer theo = ensureVolunteer("theo.volunteer@helpinghands.test", "theo", "Theo Martin",
                     "Lyon, France", "+33 6 11 22 33 44", Gender.MALE,
-                    "Logistics helper who loves environmental action days.", Set.of("Environment", "Animal care", "Logistics"));
+                    "Logistics helper who loves environmental action days.", Set.of("Environment", "Animals"));
             Volunteer lina = ensureVolunteer("lina.volunteer@helpinghands.test", "lina", "Lina Haddad",
                     "Marseille, France", "+33 6 55 44 33 22", Gender.FEMALE,
-                    "Healthcare student available for tutoring and community health events.", Set.of("Health", "Tutoring", "Translation"));
+                    "Healthcare student available for tutoring and community health events.", Set.of("Health", "Education"));
             Volunteer sofia = ensureVolunteer("sofia.volunteer@helpinghands.test", "sofia", "Sofia Nguyen",
                     "Paris, France", "+33 6 70 80 90 10", Gender.FEMALE,
-                    "Designer and event host helping local associations communicate clearly.", Set.of("Design", "Events", "Animal care"));
+                    "Designer and event host helping local associations communicate clearly.", Set.of("Community", "Animals"));
             Volunteer adam = ensureVolunteer("adam.volunteer@helpinghands.test", "adam", "Adam Williams",
                     "Nice, France", "+33 6 12 98 76 54", Gender.MALE,
-                    "Weekend driver and fundraiser for neighborhood support projects.", Set.of("Driving", "Fundraising", "Disaster relief"));
+                    "Weekend driver and fundraiser for neighborhood support projects.", Set.of("Disaster Relief", "Community"));
             Volunteer ines = ensureVolunteer("ines.volunteer@helpinghands.test", "ines", "Ines Moreau",
                     "Toulouse, France", "+33 6 44 22 88 11", Gender.FEMALE,
-                    "Retired teacher supporting literacy, homework help, and senior visits.", Set.of("Education", "Seniors", "Community"));
+                    "Retired teacher supporting literacy, homework help, and senior visits.", Set.of("Education", "Community"));
             Volunteer noah = ensureVolunteer("noah.volunteer@helpinghands.test", "noah", "Noah Garcia",
                     "Bordeaux, France", "+33 6 83 18 20 21", Gender.MALE,
-                    "First-aid certified volunteer for health events and emergency response.", Set.of("Health", "First aid", "Disaster relief"));
+                    "First-aid certified volunteer for health events and emergency response.", Set.of("Health", "Disaster Relief"));
             Volunteer camille = ensureVolunteer("camille.volunteer@helpinghands.test", "camille", "Camille Robert",
                     "Lille, France", "+33 6 32 45 66 77", Gender.OTHER,
-                    "Community organizer interested in accessibility and inclusive events.", Set.of("Accessibility", "Community events", "Translation"));
+                    "Community organizer interested in accessibility and inclusive events.", Set.of("Community", "Education"));
 
             Organization foodBridge = ensureOrganization("foodbridge.org@helpinghands.test", "foodbridge", "FoodBridge Paris",
                     "Paris, France", "+33 1 44 20 10 10",
@@ -239,9 +239,6 @@ public class SampleDataSeeder {
     }
 
     private void ensureFollows(List<UserEntity> allUsers, List<Volunteer> volunteers, List<Organization> organizations) {
-        for (UserEntity user : allUsers) {
-            ensureFollow(user, user);
-        }
         for (Volunteer volunteer : volunteers) {
             for (Organization organization : organizations) {
                 ensureFollow(volunteer, organization);

@@ -4,7 +4,7 @@ import { Volunteer } from '../models/volunteer';
 import { UserService } from '../services/user.service';
 import { follow } from '../models/follow';
 import { SearchResult } from '../models/searchResult';
-import { FollowService } from '../services/follow.service';
+import { FollowService, PendingRequest } from '../services/follow.service';
 import { HomeComponent } from '../home/home.component';
 import { Notification } from '../models/notification';
 import { Router } from '@angular/router';
@@ -27,6 +27,7 @@ export class MainNavbarComponent implements OnInit, OnDestroy {
   isFollowed=false;
   followStatus: any;
   notifications: Notification[]= [];
+  pendingRequests: PendingRequest[] = [];
   unreadCount = 0;
   currentUser: Volunteer = {} as Volunteer;
   highlightedIndex = -1;
@@ -45,6 +46,7 @@ export class MainNavbarComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.getNotif();
+    this.getPendingReq();
     this.getCurrentUser();
 
     // Debounce keystrokes so we don't hit the backend on every character typed.
@@ -176,6 +178,14 @@ export class MainNavbarComponent implements OnInit, OnDestroy {
       },
     );
     this.refreshUnreadCount();
+  }
+
+  /** Loads pending follow requests so the bell reflects them, matching the Alerts page. */
+  getPendingReq(){
+    this.followService.getPendingRequests().subscribe({
+      next: (reqs) => this.pendingRequests = reqs || [],
+      error: () => this.pendingRequests = []
+    });
   }
 
   /** Loads the logged-in user's own profile picture for the account menu icon. */

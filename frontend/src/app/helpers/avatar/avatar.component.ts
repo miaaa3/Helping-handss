@@ -48,8 +48,9 @@ export class AvatarComponent {
 
   get bgColor(): string {
     let hash = 0;
-    for (let i = 0; i < this.name.length; i++) {
-      hash = (hash * 31 + this.name.charCodeAt(i)) >>> 0;
+    const n = this.name || '';
+    for (let i = 0; i < n.length; i++) {
+      hash = (hash * 31 + n.charCodeAt(i)) >>> 0;
     }
     return AVATAR_COLORS[hash % AVATAR_COLORS.length];
   }

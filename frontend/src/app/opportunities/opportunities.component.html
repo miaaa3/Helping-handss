@@ -36,6 +36,24 @@
     </div>
     <!-- END ORG VIEW TOGGLE -->
 
+    <!-- RECOMMENDED FOR YOU (volunteers) -->
+    <section *ngIf="isVolunteer && recommended.length" class="mb-6">
+      <div class="flex items-center gap-2 mb-3">
+        <h2 class="text-base font-semibold text-gray-900">Recommended for you</h2>
+        <span class="text-xs text-gray-500">· based on your interests</span>
+      </div>
+      <div class="flex gap-4 overflow-x-auto pb-2">
+        <div *ngFor="let opp of recommended"
+             class="min-w-[240px] max-w-[240px] bg-white-chalk rounded-xl shadow-md p-4 flex flex-col gap-2">
+          <span class="self-start text-[11px] font-semibold uppercase tracking-wide text-green bg-green/10 px-2 py-0.5 rounded-full">{{ opp.category }}</span>
+          <h3 class="text-sm font-semibold text-gray-900 truncate">{{ opp.title }}</h3>
+          <div class="text-xs text-gray-600 truncate">📍 {{ opp.location }}</div>
+          <div class="text-xs text-gray-500 mt-auto">{{ opp.date | date:'mediumDate' }}</div>
+        </div>
+      </div>
+    </section>
+    <!-- END RECOMMENDED -->
+
     <!-- FILTERS -->
     <div *ngIf="!showMine" class="bg-white-chalk rounded-xl shadow-md p-4 mb-4 flex flex-wrap items-end gap-3">
       <div class="flex flex-col gap-1">

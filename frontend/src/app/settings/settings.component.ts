@@ -11,17 +11,13 @@ import { TokenStorageService } from '../services/token-storage.service';
 })
 export class SettingsComponent implements OnInit {
   interests: string[] = [
-    "Environmental Conservation",
-    "Animal Welfare",
-    "Community Service",
-    "Health and Wellness",
-    "Education",
-    "Arts and Culture",
-    "Social Justice",
-    "Elderly Care",
-    "Disaster Relief",
-    "Technology and Coding",
-    "Sports and Recreation",
+    'Environment',
+    'Education',
+    'Health',
+    'Animals',
+    'Community',
+    'Disaster Relief',
+    'Other'
   ];
 
   volunteer: any = {}; // Holds volunteer or organization profile data

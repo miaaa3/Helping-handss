@@ -39,6 +39,16 @@ export class OpportunityService {
   }
 
   /** Opportunities from organizations the current user follows - for feed cards. */
+  /** Personalized opportunity recommendations for the logged-in volunteer. */
+  getRecommended(): Observable<Opportunity[]> {
+    return this.http.get<Opportunity[]>(`${this.opportunitiesUrl}/recommended`);
+  }
+
+  /** Organizations to follow, matched to the volunteer's interests. */
+  getSuggestedOrganizations(): Observable<SuggestedOrg[]> {
+    return this.http.get<SuggestedOrg[]>(`${this.opportunitiesUrl}/suggested-organizations`);
+  }
+
   getForFeed(userId: number): Observable<Opportunity[]> {
     return this.http.get<Opportunity[]>(`${this.opportunitiesUrl}/feed`, {
       params: new HttpParams().set('userId', userId)
@@ -56,4 +66,12 @@ export class OpportunityService {
   delete(opportunityId: number): Observable<void> {
     return this.http.delete<void>(`${this.opportunitiesUrl}/${opportunityId}`);
   }
+}
+
+export interface SuggestedOrg {
+  id: number;
+  name: string;
+  profile: string;
+  type: string;
+  description: string;
 }

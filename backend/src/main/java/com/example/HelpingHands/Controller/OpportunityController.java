@@ -1,6 +1,7 @@
 package com.example.HelpingHands.Controller;
 
 import com.example.HelpingHands.DTO.OpportunityResponse;
+import com.example.HelpingHands.DTO.SuggestedOrgDTO;
 import com.example.HelpingHands.Entity.Opportunity;
 import com.example.HelpingHands.Entity.OpportunityCategory;
 import com.example.HelpingHands.Entity.OpportunityStatus;
@@ -40,6 +41,16 @@ public class OpportunityController {
     }
 
     /** Opportunities from organizations the current user follows - for feed cards. */
+    @GetMapping("/recommended")
+    public ResponseEntity<List<OpportunityResponse>> getRecommended(Principal principal) {
+        return ResponseEntity.ok(opportunityService.getRecommendedForVolunteer(principal.getName()));
+    }
+
+    @GetMapping("/suggested-organizations")
+    public ResponseEntity<List<SuggestedOrgDTO>> getSuggestedOrganizations(Principal principal) {
+        return ResponseEntity.ok(opportunityService.getSuggestedOrganizations(principal.getName()));
+    }
+
     @GetMapping("/feed")
     public ResponseEntity<List<OpportunityResponse>> getForFeed(@RequestParam Long userId) {
         return ResponseEntity.ok(opportunityService.getOpportunitiesForFollowed(userId));

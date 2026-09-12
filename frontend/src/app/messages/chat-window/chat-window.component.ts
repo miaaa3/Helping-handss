@@ -50,7 +50,7 @@ export class ChatWindowComponent implements OnInit, OnChanges, AfterViewChecked,
 
         // If the other person's message arrives while this conversation is open,
         // tell the backend right away so unread counts stay accurate.
-        if (message.senderId === this.otherUserId) {
+        if (Number(message.senderId) === Number(this.otherUserId)) {
           this.chatService.markAsRead(this.otherUserId).subscribe();
         }
       }
@@ -95,7 +95,7 @@ export class ChatWindowComponent implements OnInit, OnChanges, AfterViewChecked,
   }
 
   isMine(message: MessageResponse): boolean {
-    return message.senderId === this.currentUserId;
+    return Number(message.senderId) === Number(this.currentUserId);
   }
 
   private loadConversation(userId: number): void {
@@ -122,7 +122,7 @@ export class ChatWindowComponent implements OnInit, OnChanges, AfterViewChecked,
       return false;
     }
 
-    return message.senderId === this.otherUserId || message.receiverId === this.otherUserId;
+    return Number(message.senderId) === Number(this.otherUserId) || Number(message.receiverId) === Number(this.otherUserId);
   }
 
   private scrollToBottom(): void {

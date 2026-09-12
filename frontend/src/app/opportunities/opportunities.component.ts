@@ -18,6 +18,7 @@ import { ConfirmDialogComponent } from '../helpers/confirm-dialog/confirm-dialog
 })
 export class OpportunitiesComponent implements OnInit {
   opportunities: Opportunity[] = [];
+  recommended: Opportunity[] = [];
   loading = true;
   error = false;
 
@@ -53,6 +54,7 @@ export class OpportunitiesComponent implements OnInit {
         this.organizationId = Number(this.tokenStorage.getVolunteerId());
         if (this.isVolunteer) {
           this.loadMyApplications();
+          this.loadRecommended();
         }
       },
       error: (err) => console.error('Error getting user data:', err)
@@ -61,6 +63,14 @@ export class OpportunitiesComponent implements OnInit {
   }
 
   /** Loads the current volunteer's applications so cards can show Apply/Pending/Accepted state. */
+  /** Fetches personalized recommendations for the current volunteer. */
+  loadRecommended(): void {
+    this.opportunityService.getRecommended().subscribe({
+      next: (data) => this.recommended = (data || []).slice(0, 8),
+      error: () => this.recommended = []
+    });
+  }
+
   loadMyApplications(): void {
     this.applicationService.getMyApplications().subscribe({
       next: (applications) => {

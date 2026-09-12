@@ -9,7 +9,7 @@ import { Volunteer } from '../models/volunteer';
 import { USER_ID } from '../services/token-storage.service';
 import { FollowService } from '../services/follow.service';
 import { Opportunity } from '../models/opportunity';
-import { OpportunityService } from '../services/opportunity.service';
+import { OpportunityService, SuggestedOrg } from '../services/opportunity.service';
 import { PostComponent } from '../post/post.component';
 import { ToastrService } from 'ngx-toastr';
 
@@ -38,11 +38,13 @@ export class HomeComponent implements OnInit {
   numberOfFollowing!:number;
   numberOfFollowers!: number
   feedOpportunities: Opportunity[] = [];
+  suggestedOrgs: SuggestedOrg[] = [];
 
   ngOnInit(){
     this.getUser();
     this.getFollowing()
     this.getSuggestions()
+    this.getSuggestedOrgs()
     this.getFeedOpportunities()
   }
 
@@ -129,6 +131,25 @@ export class HomeComponent implements OnInit {
         console.error('Error fetching followers:', error);
       }
     );
+  }
+
+  getSuggestedOrgs() {
+    this.opportunityService.getSuggestedOrganizations().subscribe({
+      next: (orgs) => this.suggestedOrgs = orgs || [],
+      error: () => this.suggestedOrgs = []
+    });
+  }
+
+  /** Follow a suggested organization and drop it from the list. */
+  followOrg(orgId: number) {
+    this.followService.follow(orgId).subscribe({
+      next: (resp) => {
+        this.suggestedOrgs = this.suggestedOrgs.filter((o) => o.id !== orgId);
+        if (resp.status === 'PENDING') { this.toastr.info('Follow request sent!'); }
+        else { this.toastr.success('Following!'); }
+      },
+      error: () => this.toastr.error('Could not follow right now.')
+    });
   }
 
   getSuggestions() {

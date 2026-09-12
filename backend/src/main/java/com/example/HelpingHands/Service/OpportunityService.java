@@ -1,6 +1,7 @@
 package com.example.HelpingHands.Service;
 
 import com.example.HelpingHands.DTO.OpportunityResponse;
+import com.example.HelpingHands.DTO.SuggestedOrgDTO;
 import com.example.HelpingHands.Entity.Opportunity;
 import com.example.HelpingHands.Entity.OpportunityCategory;
 import com.example.HelpingHands.Entity.OpportunityStatus;
@@ -28,6 +29,11 @@ public interface OpportunityService {
 
     /** Open/full/closed opportunities from organizations the given user follows, for feed cards. */
     List<OpportunityResponse> getOpportunitiesForFollowed(Long userId);
+
+    /** Personalized recommendations for a volunteer, from their interests; falls back to public opportunities. */
+    List<OpportunityResponse> getRecommendedForVolunteer(String volunteerEmail);
+
+    List<SuggestedOrgDTO> getSuggestedOrganizations(String volunteerEmail);
 
     /** All opportunities platform-wide, including drafts, newest first - for admin moderation. */
     List<OpportunityResponse> getAllOpportunitiesForAdmin();

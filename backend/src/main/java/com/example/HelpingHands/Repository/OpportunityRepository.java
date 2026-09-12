@@ -4,12 +4,14 @@ import com.example.HelpingHands.Entity.Opportunity;
 import com.example.HelpingHands.Entity.OpportunityCategory;
 import com.example.HelpingHands.Entity.OpportunityStatus;
 import com.example.HelpingHands.Entity.UserEntity;
+import com.example.HelpingHands.Entity.Organization;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Set;
 
 @Repository
 public interface OpportunityRepository extends JpaRepository<Opportunity, Long> {
@@ -40,4 +42,25 @@ public interface OpportunityRepository extends JpaRepository<Opportunity, Long> 
             "AND o.organization.verificationStatus = com.example.HelpingHands.Entity.OrganizationVerificationStatus.VERIFIED " +
             "ORDER BY o.date ASC")
     List<Opportunity> findPublicOpportunities();
+
+    /** Personalized: OPEN opportunities from VERIFIED orgs whose category is one the volunteer is interested in. */
+    @Query("SELECT o FROM Opportunity o WHERE o.status = com.example.HelpingHands.Entity.OpportunityStatus.OPEN " +
+            "AND o.organization.verificationStatus = com.example.HelpingHands.Entity.OrganizationVerificationStatus.VERIFIED " +
+            "AND o.category IN :categories ORDER BY o.date ASC")
+    List<Opportunity> findRecommended(@Param("categories") java.util.Collection<OpportunityCategory> categories);
+
+    /** Verified organizations that posted OPEN opportunities in the given categories, most matches first. */
+    @Query("SELECT o.organization FROM Opportunity o " +
+            "WHERE o.category IN :categories " +
+            "AND o.status = com.example.HelpingHands.Entity.OpportunityStatus.OPEN " +
+            "AND o.organization.verificationStatus = com.example.HelpingHands.Entity.OrganizationVerificationStatus.VERIFIED " +
+            "GROUP BY o.organization ORDER BY COUNT(o) DESC")
+    List<Organization> findSuggestedOrganizationsByCategories(@Param("categories") Set<OpportunityCategory> categories);
+
+    /** Fallback: most active verified organizations overall. */
+    @Query("SELECT o.organization FROM Opportunity o " +
+            "WHERE o.status = com.example.HelpingHands.Entity.OpportunityStatus.OPEN " +
+            "AND o.organization.verificationStatus = com.example.HelpingHands.Entity.OrganizationVerificationStatus.VERIFIED " +
+            "GROUP BY o.organization ORDER BY COUNT(o) DESC")
+    List<Organization> findMostActiveOrganizations();
 }

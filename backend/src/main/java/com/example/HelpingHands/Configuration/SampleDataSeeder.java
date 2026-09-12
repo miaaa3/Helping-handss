@@ -5,6 +5,7 @@ import com.example.HelpingHands.Entity.Comment;
 import com.example.HelpingHands.Entity.Donation;
 import com.example.HelpingHands.Entity.DonationStatus;
 import com.example.HelpingHands.Entity.Follow;
+import com.example.HelpingHands.Entity.FollowStatus;
 import com.example.HelpingHands.Entity.Gender;
 import com.example.HelpingHands.Entity.Like;
 import com.example.HelpingHands.Entity.Message;
@@ -252,11 +253,21 @@ public class SampleDataSeeder {
         ensureFollow(organizations.get(3), volunteers.get(3));
         ensureFollow(organizations.get(4), volunteers.get(6));
         ensureFollow(organizations.get(5), volunteers.get(5));
+
+        // A couple of PENDING requests so the "Follow Requests" screen has demo data.
+        ensureFollow(volunteers.get(1), volunteers.get(0), FollowStatus.PENDING);
+        ensureFollow(organizations.get(2), volunteers.get(0), FollowStatus.PENDING);
     }
 
     private void ensureFollow(UserEntity follower, UserEntity following) {
+        ensureFollow(follower, following, FollowStatus.ACCEPTED);
+    }
+
+    private void ensureFollow(UserEntity follower, UserEntity following, FollowStatus status) {
         if (!followRepository.existsByFollowerAndFollowing(follower, following)) {
-            followRepository.save(new Follow(follower, following));
+            Follow follow = new Follow(follower, following);
+            follow.setStatus(status);
+            followRepository.save(follow);
         }
     }
 
